@@ -1,6 +1,6 @@
-notebook==5.2.1
-ipywidgets==7.0.4
+notebook
+ipywidgets
 websocket-client==0.37.0
-pillow==3.4.2
-scipy==0.19.1
-matplotlib==1.5.1
+pillow
+scipy
+matplotlib

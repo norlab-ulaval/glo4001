@@ -4,6 +4,8 @@
 Cours GLO-4001 et GLO-7021. En équipe de deux ou plus. Matériel requis: un ordinateur portable
 par équipe (pour la connexion wifi), une plate-forme robotique par équipe.
 
+Le responsable des laboratoires est Maxime Vaidis (maxime.vaidis.1@ulaval.ca).
+
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
 **Table des matières**
 

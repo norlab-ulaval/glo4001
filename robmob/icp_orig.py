@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def best_fit_transform(A, B):
     '''
     Calculates the least-squares best-fit transform between corresponding 3D points A->B
@@ -27,11 +28,11 @@ def best_fit_transform(A, B):
 
     # special reflection case
     if np.linalg.det(R) < 0:
-       Vt[2,:] *= -1
-       R = np.dot(Vt.T, U.T)
+        Vt[2, :] *= -1
+        R = np.dot(Vt.T, U.T)
 
     # translation
-    t = centroid_B.T - np.dot(R,centroid_A.T)
+    t = centroid_B.T - np.dot(R, centroid_A.T)
 
     # homogeneous transformation
     T = np.identity(4)
@@ -39,6 +40,7 @@ def best_fit_transform(A, B):
     T[0:3, 3] = t
 
     return T, R, t
+
 
 def nearest_neighbor(src, dst):
     '''
@@ -56,12 +58,13 @@ def nearest_neighbor(src, dst):
     for i, s in enumerate(src):
         min_dist = np.inf
         for j, d in enumerate(dst):
-            dist = np.linalg.norm(s-d)
+            dist = np.linalg.norm(s - d)
             if dist < min_dist:
                 min_dist = dist
                 indecies[i] = j
                 distances[i] = dist
     return distances, indecies
+
 
 def icp(A, B, init_pose=None, max_iterations=20, tolerance=0.001):
     '''
@@ -78,10 +81,10 @@ def icp(A, B, init_pose=None, max_iterations=20, tolerance=0.001):
     '''
 
     # make points homogeneous, copy them so as to maintain the originals
-    src = np.ones((4,A.shape[0]))
-    dst = np.ones((4,B.shape[0]))
-    src[0:3,:] = np.copy(A.T)
-    dst[0:3,:] = np.copy(B.T)
+    src = np.ones((4, A.shape[0]))
+    dst = np.ones((4, B.shape[0]))
+    src[0:3, :] = np.copy(A.T)
+    dst[0:3, :] = np.copy(B.T)
 
     # apply the initial pose estimation
     if init_pose is not None:
@@ -91,21 +94,21 @@ def icp(A, B, init_pose=None, max_iterations=20, tolerance=0.001):
 
     for i in range(max_iterations):
         # find the nearest neighbours between the current source and destination points
-        distances, indices = nearest_neighbor(src[0:3,:].T, dst[0:3,:].T)
+        distances, indices = nearest_neighbor(src[0:3, :].T, dst[0:3, :].T)
 
         # compute the transformation between the current source and nearest destination points
-        T,_,_ = best_fit_transform(src[0:3,:].T, dst[0:3,indices].T)
+        T, _, _ = best_fit_transform(src[0:3, :].T, dst[0:3, indices].T)
 
         # update the current source
         src = np.dot(T, src)
 
         # check error
         mean_error = np.sum(distances) / distances.size
-        if abs(prev_error-mean_error) < tolerance:
+        if abs(prev_error - mean_error) < tolerance:
             break
         prev_error = mean_error
 
     # calculcate final tranformation
-    T,_,_ = best_fit_transform(A, src[0:3,:].T)
+    T, _, _ = best_fit_transform(A, src[0:3, :].T)
 
     return T, distances

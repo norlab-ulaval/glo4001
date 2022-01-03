@@ -1,5 +1,6 @@
 notebook
 ipywidgets
+jupyter
 websocket-client==0.37.0
 pillow
 scipy

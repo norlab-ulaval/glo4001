@@ -1,14 +1,13 @@
-import time
 import _thread
 import json
-import math
-
+import time
 
 DO_NOT_SEND_REPEATEDLY_FLAG = None
 DEFAULT_LINEAR_SPEED = 0.12
 DEFAULT_ANGULAR_SPEED = 1.0
 MAX_LINEAR_SPEED = 0.4
 MAX_ANGULAR_SPEED = 1.8
+
 
 class RosTwistMessage:
 
@@ -27,12 +26,10 @@ class RosTwistMessage:
         }
 
 
-
 class CommandPublisher:
 
     def __init__(self):
         self.stop = False
-
 
     def start_publishing(self, send_fn, command):
         command_json = json.dumps(command.message_to_publish)
@@ -43,10 +40,8 @@ class CommandPublisher:
         else:
             _thread.start_new_thread(self._publish_repeatedly, (send_fn, command_json, frequency_hz))
 
-
     def stop_publishing(self):
         self.stop = True
-
 
     def _publish_repeatedly(self, send_fn, json, frequency_hz):
         sleep_time_sec = 1.0 / frequency_hz
@@ -55,19 +50,16 @@ class CommandPublisher:
             time.sleep(sleep_time_sec)
 
 
-
 class Command:
     def __init__(self, send_frequency_hz=10):
         self.publish_frequency_hz = send_frequency_hz
         self.message_to_publish = {
             'op': 'publish',
             'topic': '/mobile_base/commands/velocity'
-            }
-
+        }
 
     def _add_twist_message(self, twist):
         self.message_to_publish['msg'] = twist.message
-
 
 
 class ResetCommand(Command):
@@ -80,9 +72,12 @@ class MovementCommand(Command):
     def __init__(self, linear, angular):
         super().__init__()
         if abs(linear) > MAX_LINEAR_SPEED:
-            raise ValueError('La vitesse fournie est trop grande. La vitesse maximale du robot est {}'.format(MAX_LINEAR_SPEED))
+            raise ValueError(
+                'La vitesse fournie est trop grande. La vitesse maximale du robot est {}'.format(MAX_LINEAR_SPEED))
         if abs(angular) > MAX_ANGULAR_SPEED:
-            raise ValueError('La vitesse linéaire fournie est trop grande. La vitesse de rotation maximale du robot est {}'.format(MAX_ANGULAR_SPEED))
+            raise ValueError(
+                'La vitesse linéaire fournie est trop grande. La vitesse de rotation maximale du robot est {}'.format(
+                    MAX_ANGULAR_SPEED))
 
         self._add_twist_message(RosTwistMessage(linear, angular))
 

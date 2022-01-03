@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def best_fit_transform(A, B):
     '''
     Calculates the least-squares best-fit transform between corresponding 3D points A->B
@@ -27,11 +28,11 @@ def best_fit_transform(A, B):
 
     # special reflection case
     if np.linalg.det(R) < 0:
-       Vt[2,:] *= -1
-       R = np.dot(Vt.T, U.T)
+        Vt[2, :] *= -1
+        R = np.dot(Vt.T, U.T)
 
     # translation
-    t = centroid_B.T - np.dot(R,centroid_A.T)
+    t = centroid_B.T - np.dot(R, centroid_A.T)
 
     # homogeneous transformation
     T = np.identity(4)
@@ -39,6 +40,7 @@ def best_fit_transform(A, B):
     T[0:3, 3] = t
 
     return T, R, t
+
 
 def nearest_neighbor(src, dst):
     '''
@@ -57,8 +59,9 @@ def nearest_neighbor(src, dst):
         distances_mat = np.linalg.norm(dst[:] - s, axis=1)
         indecies[i] = np.argmin(distances_mat)
         distances[i] = distances_mat[indecies[i]]
-        
+
     return distances, indecies
+
 
 def homogeneous_copy_of_pcl(pcl):
     '''
@@ -73,6 +76,7 @@ def homogeneous_copy_of_pcl(pcl):
     elif pcl.shape[1] == 3:
         copy_of_pcl = np.copy(pcl)
         return np.concatenate((copy_of_pcl.T, np.ones((1, copy_of_pcl.shape[0]))), axis=0)
+
 
 def icp(A, B, init_pose=None, max_iterations=50, tolerance=0.001):
     '''
@@ -100,10 +104,10 @@ def icp(A, B, init_pose=None, max_iterations=50, tolerance=0.001):
 
     for i in range(max_iterations):
         # find the nearest neighbours between the current source and destination points
-        distances, indices = nearest_neighbor(src[0:3,:].T, dst[0:3,:].T)
+        distances, indices = nearest_neighbor(src[0:3, :].T, dst[0:3, :].T)
 
         # compute the transformation between the current source and nearest destination points
-        T,_,_ = best_fit_transform(src[0:3,:].T, dst[0:3,indices].T)
+        T, _, _ = best_fit_transform(src[0:3, :].T, dst[0:3, indices].T)
 
         # update the current source
         src = np.dot(T, src)
@@ -111,11 +115,11 @@ def icp(A, B, init_pose=None, max_iterations=50, tolerance=0.001):
         # check error
         mean_error = np.average(distances)
         print('Mean distance between associated points: {}'.format(mean_error))
-        if abs(prev_error-mean_error) < tolerance:
+        if abs(prev_error - mean_error) < tolerance:
             break
         prev_error = mean_error
 
     # calculcate final tranformation
-    T,_,_ = best_fit_transform(A[:,0:3], src[0:3,:].T)
+    T, _, _ = best_fit_transform(A[:, 0:3], src[0:3, :].T)
 
     return T, distances

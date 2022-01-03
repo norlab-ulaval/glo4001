@@ -89,3 +89,6 @@ ENV/
 
 # vim
 *.swp
+
+# Pycharm
+/.idea/

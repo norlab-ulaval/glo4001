@@ -8,6 +8,10 @@ DEFAULT_ANGULAR_SPEED = 1.0
 MAX_LINEAR_SPEED = 0.4
 MAX_ANGULAR_SPEED = 1.8
 
+SIMULATION_COMMAND_TOPIC = '/cmd_vel'
+ROBOT_COMMAND_TOPIC = '/mobile_base/commands/velocity'
+COMMAND_TOPIC = SIMULATION_COMMAND_TOPIC  # change this to select if you are working in simulation or with a real robot
+
 
 class RosTwistMessage:
 
@@ -55,7 +59,7 @@ class Command:
         self.publish_frequency_hz = send_frequency_hz
         self.message_to_publish = {
             'op': 'publish',
-            'topic': '/mobile_base/commands/velocity'
+            'topic': COMMAND_TOPIC
         }
 
     def _add_twist_message(self, twist):

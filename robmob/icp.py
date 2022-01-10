@@ -2,7 +2,7 @@ import numpy as np
 
 
 def best_fit_transform(A, B):
-    '''
+    """
     Calculates the least-squares best-fit transform between corresponding 3D points A->B
     Input:
       A: Nx3 numpy array of corresponding 3D points
@@ -11,7 +11,7 @@ def best_fit_transform(A, B):
       T: 4x4 homogeneous transformation matrix
       R: 3x3 rotation matrix
       t: 3x1 column vector
-    '''
+    """
 
     assert len(A) == len(B)
 
@@ -43,7 +43,7 @@ def best_fit_transform(A, B):
 
 
 def nearest_neighbor(src, dst):
-    '''
+    """
     Find the nearest (Euclidean) neighbor in dst for each point in src
     Input:
         src: Nx3 array of points
@@ -51,7 +51,7 @@ def nearest_neighbor(src, dst):
     Output:
         distances: Euclidean distances (errors) of the nearest neighbor
         indecies: dst indecies of the nearest neighbor
-    '''
+    """
 
     indecies = np.zeros(src.shape[0], dtype=np.int)
     distances = np.zeros(src.shape[0])
@@ -64,13 +64,13 @@ def nearest_neighbor(src, dst):
 
 
 def homogeneous_copy_of_pcl(pcl):
-    '''
+    """
     Input:
         pcl: Nx3 or Nx4 numpy array of 3D points.
     Output:
         A deep copy of the point cloud, in homogeneous coordinates.
         If the input matrix had 4 columns, it is returned as is.
-    '''
+    """
     if pcl.shape[1] == 4:
         return np.copy(pcl.T)
     elif pcl.shape[1] == 3:
@@ -79,7 +79,7 @@ def homogeneous_copy_of_pcl(pcl):
 
 
 def icp(A, B, init_pose=None, max_iterations=50, tolerance=0.001):
-    '''
+    """
     The Iterative Closest Point method
     Input:
         A: Nx3 or Nx4 numpy array of source 3D points
@@ -90,7 +90,7 @@ def icp(A, B, init_pose=None, max_iterations=50, tolerance=0.001):
     Output:
         T: final homogeneous transformation
         distances: Euclidean distances (errors) of the nearest neighbor
-    '''
+    """
 
     # Convert the points to homogeneous coordinates.
     src = homogeneous_copy_of_pcl(A)

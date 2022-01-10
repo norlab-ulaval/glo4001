@@ -2,12 +2,12 @@ import numpy as np
 
 
 def circle_intersection(circle1, circle2):
-    '''
+    """
     @summary: calculates intersection points of two circles
     @param circle1: tuple(x,y,radius)
     @param circle2: tuple(x,y,radius)
     @result: tuple of intersection points (which are (x,y) tuple)
-    '''
+    """
     # return self.circle_intersection_sympy(circle1,circle2)
     x1, y1, r1 = circle1
     x2, y2, r2 = circle2

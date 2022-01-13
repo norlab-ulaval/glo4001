@@ -8,9 +8,10 @@ DEFAULT_ANGULAR_SPEED = 1.0
 MAX_LINEAR_SPEED = 0.4
 MAX_ANGULAR_SPEED = 1.8
 
+IN_SIMULATOR = True  # change this to select if you are working in simulation or with a real robot
 SIMULATION_COMMAND_TOPIC = '/cmd_vel'
 ROBOT_COMMAND_TOPIC = '/mobile_base/commands/velocity'
-COMMAND_TOPIC = SIMULATION_COMMAND_TOPIC  # change this to select if you are working in simulation or with a real robot
+COMMAND_TOPIC = SIMULATION_COMMAND_TOPIC if IN_SIMULATOR else ROBOT_COMMAND_TOPIC
 
 
 class RosTwistMessage:

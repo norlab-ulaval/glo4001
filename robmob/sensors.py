@@ -7,6 +7,8 @@ from io import BytesIO
 import numpy as np
 from PIL import Image
 
+IN_SIMULATION = True
+
 
 class Sensor:
     def __init__(self, buffer_size):
@@ -91,6 +93,7 @@ class RPlidarSensor(Sensor):
                 }
 
 
+# TODO simulation
 class SharpSensor(Sensor):
     TOPIC = '/mobile_base/sensors/core'
     MESSAGE_TYPE = 'kobuki_msgs/SensorState'
@@ -114,7 +117,7 @@ class SharpSensor(Sensor):
 
 
 class GyroSensor(Sensor):
-    TOPIC = '/mobile_base/sensors/imu_data_raw'
+    TOPIC = '/imu' if IN_SIMULATION else '/mobile_base/sensors/imu_data_raw'
     MESSAGE_TYPE = 'sensor_msgs/Imu'
     SAMPLE_RATE = 108
 
@@ -133,7 +136,7 @@ class GyroSensor(Sensor):
 
 
 class KinectRGBSensor(Sensor):
-    TOPIC = '/kinect_rgb_compressed'
+    TOPIC = '/camera/color/image_raw/compressed' if IN_SIMULATION else '/kinect_rgb_compressed'
     MESSAGE_TYPE = 'sensor_msgs/CompressedImage'
     SAMPLE_RATE = 5
 
@@ -147,8 +150,8 @@ class KinectRGBSensor(Sensor):
 
 
 class KinectDepthSensor(Sensor):
-    TOPIC = '/kinect_depth_compressed'
-    MESSAGE_TYPE = 'sensor_msgs/CompressedImage'
+    TOPIC = '/camera/depth/image_raw/compressedDepth' if IN_SIMULATION else '/kinect_depth_compressed'
+    MESSAGE_TYPE = 'sensor_msgs/CompressedImage' if IN_SIMULATION else 'sensor_msgs/CompressedImage'
     SAMPLE_RATE = 5
     FOV_X = 365.456
     FOV_Y = 365.456
@@ -172,11 +175,15 @@ class KinectDepthSensor(Sensor):
 
 
 class OdometerTicksSensor(Sensor):
-    TOPIC = '/mobile_base/sensors/core'
-    MESSAGE_TYPE = 'kobuki_msgs/SensorState'
+    TOPIC = '/joint_states' if IN_SIMULATION else '/mobile_base/sensors/core'
+    MESSAGE_TYPE = 'sensor_msgs/JointState' if IN_SIMULATION else 'kobuki_msgs/SensorState'
     SAMPLE_RATE = 50
 
-    TICK_TO_METER = 0.000085292090497737556558
+    """
+    <wheelSeparation>0.160</wheelSeparation>
+    <wheelDiameter>0.066</wheelDiameter>
+    """
+    TICK_TO_METER = 0.000085292090497737556558  # TODO simulation
     ENCODER_MAX_VALUE = 65535
 
     def __init__(self, buffer_size=200):
@@ -187,8 +194,8 @@ class OdometerTicksSensor(Sensor):
         self.base_left = 0
 
     def parse_message(self, message):
-        left = message['msg']['left_encoder']
-        right = message['msg']['right_encoder']
+        left = message['msg']['position'][1] if IN_SIMULATION else message['msg']['left_encoder']
+        right = message['msg']['position'][0] if IN_SIMULATION else message['msg']['right_encoder']
 
         if left - self.last_left > 10000:
             self.base_left -= self.ENCODER_MAX_VALUE

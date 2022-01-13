@@ -93,10 +93,9 @@ class RPlidarSensor(Sensor):
                 }
 
 
-# TODO simulation
 class SharpSensor(Sensor):
-    TOPIC = '/mobile_base/sensors/core'
-    MESSAGE_TYPE = 'kobuki_msgs/SensorState'
+    TOPIC = '/range/front' if IN_SIMULATION else '/mobile_base/sensors/core'
+    MESSAGE_TYPE = 'sensor_msgs/LaserScan' if IN_SIMULATION else 'kobuki_msgs/SensorState'
     SAMPLE_RATE = 50
 
     # Calibration table of the high range sharp sensor, for 15+ cm.
@@ -104,7 +103,7 @@ class SharpSensor(Sensor):
         [[15, 2.76], [20, 2.53], [30, 1.99], [40, 1.53], [50, 1.23], [60, 1.04], [70, 0.91], [80, 0.82], [90, 0.72],
          [100, 0.66], [110, 0.6], [120, 0.55], [130, 0.50], [140, 0.46], [150, 0.435], [150, 0]])
 
-    def __init__(self, analog_input_id, buffer_size=100):
+    def __init__(self, analog_input_id=0, buffer_size=100):
         """
         There are two Sharp sensors on the robot. The analog_input_id 0 is the long range sensor
         and the analog_input_id 1 is the short range sensor.
@@ -113,7 +112,32 @@ class SharpSensor(Sensor):
         self.analog_input_id = analog_input_id
 
     def parse_message(self, message):
-        return float(message['msg']['analog_input'][self.analog_input_id]) / 4096 * 3.3
+        if IN_SIMULATION:
+            val = message['msg']['ranges'][0]
+            if val is None:
+                return math.inf
+            return float(val)
+        else:
+            return float(message['msg']['analog_input'][self.analog_input_id]) / 4096 * 3.3
+
+
+class OracleSharpSensor(Sensor):
+    TOPIC = '/proximity/front'
+    MESSAGE_TYPE = 'sensor_msgs/LaserScan'
+    SAMPLE_RATE = 50
+
+    def __init__(self, analog_input_id=0, buffer_size=100):
+        """
+        Oracle sensor that can give you the ground truth distance from the sensor.
+        Returns a value in cm
+        """
+        super().__init__(buffer_size)
+        if not IN_SIMULATION:
+            raise RuntimeError(f'Cannot instantiate {type(self).__name__} while not in a simulator')
+        self.analog_input_id = analog_input_id
+
+    def parse_message(self, message):
+        return float(message['msg']['ranges'][0] * 100)
 
 
 class GyroSensor(Sensor):

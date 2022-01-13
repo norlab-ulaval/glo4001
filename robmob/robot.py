@@ -1,16 +1,15 @@
-import collections
-import json
 import _thread
-import urllib.parse
-import websocket
+import json
 import time
+import urllib.parse
+
+import websocket
+
 from robmob.commands import CommandPublisher, LinearMovementCommand, ResetCommand, RotationCommand, MovementCommand
 from robmob.sensors import FullOdomSensor
 
 
-
 class Robot:
-
     DISTANCE_CENTER_TO_WHEEL = 0.11
 
     def __init__(self, robot_ip, port=9090):
@@ -28,13 +27,12 @@ class Robot:
             print("L'adresse IP fournie est invalide")
             print(self.robot_url)
 
-
     def connect(self):
         self.ws = websocket.WebSocketApp(self.robot_url,
-                                         on_message = self._on_message,
-                                         on_error = self._on_error,
-                                         on_close = self._on_close,
-                                         on_open = self._on_open)
+                                         on_message=self._on_message,
+                                         on_error=self._on_error,
+                                         on_close=self._on_close,
+                                         on_open=self._on_open)
 
         self.connecting = True
 
@@ -44,7 +42,6 @@ class Robot:
             time.sleep(0.2)
             # on_error will set self.connecting to false if we timeout.
 
-
     def add_sensor(self, sensor):
         self.ws.send(json.dumps(sensor.subscription_message))
 
@@ -53,13 +50,11 @@ class Robot:
         else:
             self.sensors[sensor.TOPIC] = [sensor]
 
-
     def send_command(self, command):
         if self.publisher:
             self.publisher.stop_publishing()
         self.publisher = CommandPublisher()
         self.publisher.start_publishing(self.ws.send, command)
-
 
     def disconnect(self):
         self.ws.keep_running = False
@@ -76,10 +71,8 @@ class Robot:
         time.sleep(duration)
         self.send_command(ResetCommand())
 
-
     def _moved_distance(self, initial_x, initial_y, x, y):
-        return ((x - initial_x)**2 + (y - initial_y)**2)**0.5
-
+        return ((x - initial_x) ** 2 + (y - initial_y) ** 2) ** 0.5
 
     def linear_movement_precise(self, distance, speed):
         if not self.odom:
@@ -87,7 +80,7 @@ class Robot:
             self.add_sensor(self.odom)
             time.sleep(0.4)
 
-        breaking_distance = speed / 0.05 * 0.0025 # Very approximative
+        breaking_distance = speed / 0.05 * 0.0025  # Very approximative
         initial_x, initial_y, _ = self.odom.peek_data()
         x, y = initial_x, initial_y
         command = LinearMovementCommand(speed)
@@ -96,7 +89,6 @@ class Robot:
             time.sleep(0.5 / self.odom.SAMPLE_RATE)
             x, y, _ = self.odom.peek_data()
         self.send_command(ResetCommand())
-
 
     def angular_movement(self, speed, duration):
         command = RotationCommand(speed)
@@ -112,16 +104,13 @@ class Robot:
         if message_topic in self.sensors:
             [s.on_message(parsed_message) for s in self.sensors[message_topic]]
 
-
     def _on_open(self, *args, **kargs):
         self.connecting = False
         self.connection_established = True
 
-
     def _on_error(self, *args, **kargs):
         self.connecting = False
         raise RuntimeError('Échec de la connexion au robot')
-
 
     def _on_close(self, *args, **kargs):
         pass

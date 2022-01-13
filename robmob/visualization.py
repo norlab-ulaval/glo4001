@@ -1,6 +1,5 @@
-import math
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib import animation
 
 
@@ -9,9 +8,8 @@ class Visualizer:
     def __init__(self, sensor):
         self.sensor = sensor
 
-
     def plot_data(self):
-        fig, ax = plt.subplots(1,1, subplot_kw=dict(projection='polar'))
+        fig, ax = plt.subplots(1, 1, subplot_kw=dict(projection='polar'))
 
         ax.grid(True)
         ax.set_rmax(3.0)
@@ -26,9 +24,8 @@ class Visualizer:
 
         plt.show()
 
-
     def animate_sensor(self, animation_length_second=2):
-        fig, ax = plt.subplots(1,1, subplot_kw=dict(projection='polar'))
+        fig, ax = plt.subplots(1, 1, subplot_kw=dict(projection='polar'))
 
         ax.grid(True)
         ax.set_rmax(3.0)

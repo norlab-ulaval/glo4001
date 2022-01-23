@@ -51,6 +51,12 @@ exécution et du texte. Voici un exemple de *jupyter notebook* à l'oeuvre.
 
 <img src="doc/jupyterexample.png"></img>
 
+## Machine virtuelle et simulateur
+
+Il est aussi possible d'un simulateur plutôt que la base `kobuki`. Pour ce faire, veuillez télécharger la machine virtuelle disponible à [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001.zip).
+
+Les instructions pour mettre en marche le simulateur se trouvent dans le laboratoire 0.
+
 ## Installation
 
 Dans cette section nous verrons comment installer *jupyter* et la librairie
@@ -67,25 +73,19 @@ Grâce à la ligne de commande, nous allons créer un `virtualenv` python qui
 contient les logiciels nécessaires pour faire les laboratoires. Assurez-vous
 d'abord d'avoir les paquets suivants.
 
-Pour Ubuntu 16.04:
+Pour Ubuntu 20.04 et plus:
 
-```
-$ sudo apt-get install python-virtualenv git libfreetype6-dev libpng12-dev libjpeg-dev
-```
-
-Pour Ubuntu 14.04:
-
-```
-$ sudo apt-get install python-virtualenv git libpng_devel libjpeg-dev freetype_devel
+```bash
+$ sudo apt install python3-pip python3-venv python3-testresources
 ```
 
 Ensuite, créez un environnement virtuel avec la commande suivante.
 
 ```
-$ virtualenv -p /usr/bin/python3 <NOM_DU_VENV>
+$ python3 -m venv <NOM_DU_VENV>
 ```
 
-Le `-p /usr/bin/python3` sert à nous assurer que l'environnement utilisera la bonne version de python. Activez le virtualenv avec la commande suivante.
+Activez l'environment avec:
 
 ```
 $ source <NOM_DU_VENV>/bin/activate
@@ -98,7 +98,7 @@ Si l'activation a réussi, vous verrez `<NOM_DU_VENV>` à la gauche de votre inv
 Dans un autre dossier, lancez la commande
 
 ```
-$ git clone https://github.com/davidlandry93/glo4001
+$ git clone https://github.com/norlab-ulaval/glo4001
 ```
 
 Cette commande téléchargera le code nécessaire aux laboratoires. Il contient aussi un fichier
@@ -124,6 +124,18 @@ $ jupyter notebook
 
 Avec un peu de chance, votre navigateur web devrait ouvrir un nouvel onglet pointant sur le notebook *jupyter*. Bien joué! Maintenant, vous pouvez ouvrir le fichier `Laboratoire 0.ipynb` et vous
 connecter à votre robot.
+
+Si vous obtenez une erreur comme quoi jupyter n'est pas une commande, ouvrez le fichier `.bashrc` avec `gedit ~/.bashrc`. Ensuit, ajoutez-y la ligne suivante à la toute fin:
+
+```
+export PATH=$PATH:/home/student/.local/bin
+```
+
+Si vous obtenez une erreur de connexion au kernel, essayez la commande suivante:
+
+```bash
+pip3 isntall -I notebook
+```
 
 ### Windows
 

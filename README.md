@@ -53,7 +53,7 @@ exécution et du texte. Voici un exemple de *jupyter notebook* à l'oeuvre.
 
 ## Machine virtuelle et simulateur
 
-Il est aussi possible d'un simulateur plutôt que la base `kobuki`. Pour ce faire, veuillez télécharger la machine virtuelle disponible à [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001.zip).
+Il est aussi possible d'un simulateur plutôt que la base `kobuki`. Pour ce faire, veuillez télécharger la machine virtuelle disponible à [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
 
 Les instructions pour mettre en marche le simulateur se trouvent dans le laboratoire 0.
 

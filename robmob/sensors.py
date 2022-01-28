@@ -137,7 +137,10 @@ class OracleSharpSensor(Sensor):
         self.analog_input_id = analog_input_id
 
     def parse_message(self, message):
-        return float(message['msg']['ranges'][0] * 100)
+        try:
+            return float(message['msg']['ranges'][0] * 100)
+        except:
+            return np.inf
 
 
 class GyroSensor(Sensor):

@@ -2,6 +2,7 @@ import base64
 import collections
 import math
 import time
+from abc import ABC, abstractmethod
 from io import BytesIO
 
 import numpy as np
@@ -10,7 +11,7 @@ from PIL import Image
 IN_SIMULATION = True
 
 
-class Sensor:
+class Sensor(ABC):
     def __init__(self, buffer_size):
         self.buffer_size = buffer_size
         self.buffer = collections.deque([], maxlen=buffer_size)
@@ -21,10 +22,14 @@ class Sensor:
         self.unsubscribe_message = {'op': 'unsubscribe',
                                     'topic': self.TOPIC}
 
+    @abstractmethod
+    def parse_message(self, message):
+        ...
+
     def on_message(self, message):
         parsed_message = self.parse_message(message)
         self.buffer.append(parsed_message)
-        if self.continuous_buffer != None:
+        if self.continuous_buffer is not None:
             self.continuous_buffer.append(parsed_message)
 
     def read_data(self):
@@ -254,3 +259,15 @@ class FullOdomSensor(Sensor):
         return (message['msg']['pose']['pose']['position']['x'],
                 message['msg']['pose']['pose']['position']['y'],
                 2 * math.acos(message['msg']['pose']['pose']['orientation']['w']))
+
+
+class SimulatorSensor(Sensor):
+    TOPIC = '/gazebo/performance_metrics'
+    MESSAGE_TYPE = 'gazebo_msgs/PerformanceMetrics'
+    SAMPLE_RATE = 6
+
+    def __init__(self, buffer_size=10):
+        super().__init__(buffer_size)
+
+    def parse_message(self, message):
+        return {'real_time_factor': message['msg']['real_time_factor']}

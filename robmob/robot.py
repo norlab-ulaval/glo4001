@@ -1,5 +1,6 @@
 import _thread
 import json
+import math
 import time
 import urllib.parse
 
@@ -7,10 +8,11 @@ import websocket
 
 from robmob.commands import CommandPublisher, LinearMovementCommand, ResetCommand, RotationCommand, MovementCommand
 from robmob.sensors import FullOdomSensor
+from robmob.simulation import IN_SIMULATION
 
 
 class Robot:
-    DISTANCE_CENTER_TO_WHEEL = 0.11
+    DISTANCE_CENTER_TO_WHEEL = 0.503124740324218 / (2 * math.pi) if IN_SIMULATION else 0.11
 
     def __init__(self, robot_ip, port=9090):
         self.ws = None

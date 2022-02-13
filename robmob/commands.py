@@ -1,6 +1,7 @@
 import _thread
 import json
 import time
+from simulation import IN_SIMULATION
 
 DO_NOT_SEND_REPEATEDLY_FLAG = None
 DEFAULT_LINEAR_SPEED = 0.12
@@ -8,10 +9,9 @@ DEFAULT_ANGULAR_SPEED = 1.0
 MAX_LINEAR_SPEED = 0.4
 MAX_ANGULAR_SPEED = 1.8
 
-IN_SIMULATOR = True  # change this to select if you are working in simulation or with a real robot
 SIMULATION_COMMAND_TOPIC = '/cmd_vel'
 ROBOT_COMMAND_TOPIC = '/mobile_base/commands/velocity'
-COMMAND_TOPIC = SIMULATION_COMMAND_TOPIC if IN_SIMULATOR else ROBOT_COMMAND_TOPIC
+COMMAND_TOPIC = SIMULATION_COMMAND_TOPIC if IN_SIMULATION else ROBOT_COMMAND_TOPIC
 
 
 class RosTwistMessage:

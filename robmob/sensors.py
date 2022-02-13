@@ -8,7 +8,7 @@ from io import BytesIO
 import numpy as np
 from PIL import Image
 
-IN_SIMULATION = True
+from robmob.simulation import IN_SIMULATION
 
 
 class Sensor(ABC):
@@ -215,7 +215,7 @@ class OdometerTicksSensor(Sensor):
     <wheelSeparation>0.160</wheelSeparation>
     <wheelDiameter>0.066</wheelDiameter>
     """
-    TICK_TO_METER = 0.000085292090497737556558  # TODO simulation
+    TICK_TO_METER = 1 / 30.529114682212146 if IN_SIMULATION else 0.000085292090497737556558
     ENCODER_MAX_VALUE = 65535
 
     def __init__(self, buffer_size=200):

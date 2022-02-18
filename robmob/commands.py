@@ -1,7 +1,7 @@
 import _thread
 import json
 import time
-from simulation import IN_SIMULATION
+from robmob.simulation import IN_SIMULATION
 
 DO_NOT_SEND_REPEATEDLY_FLAG = None
 DEFAULT_LINEAR_SPEED = 0.12

@@ -271,3 +271,6 @@ class SimulatorSensor(Sensor):
 
     def parse_message(self, message):
         return {'real_time_factor': message['msg']['real_time_factor']}
+
+    def mean_real_time_factor(self):
+        return np.mean([x['real_time_factor'] for x in self.buffer])

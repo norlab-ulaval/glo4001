@@ -168,6 +168,7 @@ class GyroSensor(Sensor):
     TOPIC = '/imu' if IN_SIMULATION else '/mobile_base/sensors/imu_data_raw'
     MESSAGE_TYPE = 'sensor_msgs/Imu'
     SAMPLE_RATE = 108
+    SAMPLE_RATE_SIM = 930
 
     def __init__(self, buffer_size=200):
         super().__init__(buffer_size)

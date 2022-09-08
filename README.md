@@ -7,26 +7,27 @@ par équipe (pour la connexion wifi), une plate-forme robotique par équipe.
 
 Le responsable des laboratoires est William Guimont-Martin (william.guimont-martin.1@ulaval.ca).
 
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table des matières**
 
+- [Laboratoires des cours GLO-4001 et GLO-7021](#laboratoires-des-cours-glo-4001-et-glo-7021)
 - [Introduction](#introduction)
+- [Machine virtuelle et simulateur](#machine-virtuelle-et-simulateur)
 - [Architecture logicielle](#architecture-logicielle)
 - [Installation](#installation)
-    - [Linux (ubuntu)](#linux-ubuntu)
-        - [Création d'un environnement virtuel python3](#création-dun-environnement-virtuel-python3)
-        - [Acquisition du code des laboratoires](#acquisition-du-code-des-laboratoires)
-        - [Lancer jupyter](#lancer-jupyter-linux)
-    - [Windows](#windows)
-        - [Installation de anaconda](#installation-de-anaconda)
-        - [Téléchargement du code du cours](#téléchargement-du-code-du-cours)
-        - [Installation des librairies nécessaires](#installation-des-librairies-nécessaires)
-        - [Lancer jupyter](#lancer-jupyter-windows)
+  - [Linux (Ubuntu)](#linux-ubuntu)
+    - [Acquisition du code des laboratoires](#acquisition-du-code-des-laboratoires)
+    - [Création d'un environnement virtuel python3](#création-dun-environnement-virtuel-python3)
+    - [Lancer jupyter (linux)](#lancer-jupyter-linux)
+  - [Windows](#windows)
+    - [Installation de anaconda](#installation-de-anaconda)
+    - [Téléchargement du code du cours](#téléchargement-du-code-du-cours)
+    - [Installation des librairies nécessaires](#installation-des-librairies-nécessaires)
+    - [Lancer jupyter (windows)](#lancer-jupyter-windows)
 - [Lancer un laboratoire](#lancer-un-laboratoire)
 
 <!-- markdown-toc end -->
-
-
+    
 ## Introduction
 
 Cette série de laboratoires vous fera expérimenter certains aspects vus dans le
@@ -42,6 +43,14 @@ En présentiel, nous disposons de vraies plate-formes robotiques
 ordinateur de bord *Kangaroo*, une paire de capteurs infra-rouge, une caméra
 *Kinect* et un IMU intégré. Ce plus, certaines plate-formes sont équipées avec un
 capteur LiDAR.
+
+## Machine virtuelle et simulateur
+
+Il est aussi possible d'un simulateur plutôt que la base `kobuki`. 
+Pour ce faire, veuillez télécharger la machine virtuelle 
+disponible à [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
+
+Les instructions pour mettre en marche le simulateur se trouvent dans le laboratoire 0.
 
 ## Architecture logicielle
 
@@ -59,14 +68,6 @@ exécution et du texte. Voici un exemple de *jupyter notebook* à l'oeuvre.
 
 <img src="doc/jupyterexample.png"></img>
 
-## Machine virtuelle et simulateur
-
-Il est aussi possible d'un simulateur plutôt que la base `kobuki`. 
-Pour ce faire, veuillez télécharger la machine virtuelle 
-disponible à [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
-
-Les instructions pour mettre en marche le simulateur se trouvent dans le laboratoire 0.
-
 ## Installation
 
 Dans cette section nous verrons comment installer *jupyter* et la librairie
@@ -76,6 +77,15 @@ Dans cette section nous verrons comment installer *jupyter* et la librairie
 
 Les instructions qui suivent sont spécifiques à Ubuntu mais devraient bien se 
 généraliser à d'autres distributions (et peut-être même MacOS).
+
+#### Acquisition du code des laboratoires
+
+Dans un autre dossier, lancez la commande
+
+```bash
+$ git clone https://github.com/norlab-ulaval/glo4001
+$ cd glo4001
+```
 
 #### Création d'un environnement virtuel python3
 
@@ -89,13 +99,13 @@ $ sudo apt install python3-pip python3-venv python3-testresources
 
 Ensuite, créez un environnement virtuel avec la commande suivante.
 
-```
+```bash
 $ python3 -m venv venv
 ```
 
 Activez l'environment avec:
 
-```
+```bash
 $ source venv/bin/activate
 ```
 
@@ -103,21 +113,9 @@ Vous devrez activer l'environnement avant de débuter chaque laboratoire.
 
 Si l'activation a réussi, vous verrez `(venv)` à la gauche de votre invite de commande.
 
-#### Acquisition du code des laboratoires
+Le dépôt contient un fichier `requirements.txt` qui contient la liste des libraries python dont on a besoin pour exécuter le code fourni. Heureusement, on peut les installer automatiquement avec une commande. Assurez-vous d'avoir activé l'environnement virtuel avant de lancer cette commande.
 
-Dans un autre dossier, lancez la commande
-
-```
-$ git clone https://github.com/norlab-ulaval/glo4001
-```
-
-Cette commande téléchargera le code nécessaire aux laboratoires. Il contient aussi un fichier
-`requirements.txt` qui contient la liste des libraries python dont on a besoin pour exécuter
-le code fourni. Heureusement, on peut les installer automatiquement avec une commande. Assurez-vous
-d'avoir activé l'environnement virtuel avant de lancer cette commande.
-
-```
-$ cd glo4001
+```bash
 $ pip install -r requirements.txt
 ```
 
@@ -128,7 +126,7 @@ librairies nécessaires. Vous pouvez le tester en tentant de lancer le *jupyter
 notebook* (toujours avec l'environnement virtel activé). Lancez cette commande à
 partir de l'intérieur du repo `glo4001`.
 
-```
+```bash
 $ jupyter notebook
 ```
 
@@ -138,7 +136,7 @@ Bien joué! Maintenant, vous pouvez ouvrir le fichier `Laboratoire 0.ipynb` et v
 Si vous obtenez une erreur comme quoi jupyter n'est pas une commande, 
 ouvrez le fichier `.bashrc` avec `gedit ~/.bashrc`. Ensuit, ajoutez-y la ligne suivante à la toute fin:
 
-```
+```bash
 export PATH=$PATH:/home/student/.local/bin
 ```
 

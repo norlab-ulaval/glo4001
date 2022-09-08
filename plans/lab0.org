@@ -1,0 +1,31 @@
+#+title: Lab0
+#+author: William Guimont-Martin
+
+* Buts du laboratoire
+- Installation des outils
+  - Python
+  - Machine virtuelle
+  - Laboratoires du cours
+- Introduction au simulateur
+  - Comment l'utiliser
+  - Raccourcis fréquents
+  - Configuration
+- Introduction aux algorithmes de robotique mobile
+  - Début de réflexion sur les algorithmes
+  - Mapping
+  - SLAM
+  - Localisation
+  - Filtre à particules
+  - Planification de chemins
+- Introduction aux laboratoies
+  - Connexion au robot avec Python
+  - Utilisation de robmob
+  - Introduction a matplotlib
+* Plan de la séance
+- Laboratoires: https://github.com/norlab-ulaval/glo4001
+- *Télécharger la machine virtuelle du cours (~6Gb)!*
+- Suivre les instructions du README
+- Suivre le Laboratoire 0.ipynb
+- *Mettre à jour le code du simulateur!*
+- *Important de bien comprendre comment lancer le simulateur!*
+- Disponible pour répondre aux questions

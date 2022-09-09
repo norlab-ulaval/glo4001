@@ -48,7 +48,7 @@ capteur LiDAR.
 
 Il est aussi possible d'un simulateur plutôt que la base `kobuki`. 
 Pour ce faire, veuillez télécharger la machine virtuelle 
-disponible à [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
+disponible à [cette adresse](http://www.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
 
 Les instructions pour mettre en marche le simulateur se trouvent dans le laboratoire 0.
 

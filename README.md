@@ -1,8 +1,10 @@
 # Laboratoires des cours GLO-4001 et GLO-7021
 
-**À distance:**: Seul ou en équipe. Matériel requis: ordinateur.
+Les laboratoires sont conçus pour pouvoir être réalisés soit avec un vrai robot ou le simulateur.
 
-**En présentiel:** En équipe de deux ou plus. Matériel requis: un ordinateur portable
+**En simulateur :** Seul ou en équipe. Matériel requis: ordinateur.
+
+**Avec une plate-forme robotique :** En équipe de deux ou plus. Matériel requis: un ordinateur portable
 par équipe (pour la connexion wifi), une plate-forme robotique par équipe.
 
 Le responsable des laboratoires est William Guimont-Martin (william.guimont-martin.1@ulaval.ca).
@@ -30,15 +32,14 @@ Le responsable des laboratoires est William Guimont-Martin (william.guimont-mart
     
 ## Introduction
 
-Cette série de laboratoires vous fera expérimenter certains aspects vus dans le
-cours de robotique mobile. 
+Cette série de laboratoires vous fera expérimenter certains aspects vus dans le cours de robotique mobile. 
 
-À distance, nous avons un simulateur permettant d'expérimenter avec des robots virtuel. Un simulateur 
+**En simulation :** Nous avons un simulateur permettant d'expérimenter avec des robots virtuel. Un simulateur 
 de robotique est un outil extrêmement pratique pour, entre autres, 
 tester des algorithmes, expérimenter dans différents environments, 
 entraîner des modèles d'apprentissage automatique et valider son code.
 
-En présentiel, nous disposons de vraies plate-formes robotiques
+**Avec une plate-forme robotique :** Nous disposons de plate-formes robotiques
 *Kobuki* de la compagnie iClebo. Toutes les plate-formes disposent d'un
 ordinateur de bord *Kangaroo*, une paire de capteurs infra-rouge, une caméra
 *Kinect* et un IMU intégré. Ce plus, certaines plate-formes sont équipées avec un
@@ -46,11 +47,33 @@ capteur LiDAR.
 
 ## Machine virtuelle et simulateur
 
-Il est aussi possible d'un simulateur plutôt que la base `kobuki`. 
-Pour ce faire, veuillez télécharger la machine virtuelle 
-disponible à [cette adresse](http://www.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
+Il est aussi possible d'un simulateur plutôt que la base `kobuki`.
 
-Les instructions pour mettre en marche le simulateur se trouvent dans le laboratoire 0.
+**Si vous utilisez votre propre ordinateur :** 
+Téléchargez la machine virtuelle pour **VirtualBox** disponible à TODO [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
+
+**Si vous utilisez un ordinateur du laboratoire informatique :** 
+Téléchargez la machine virtuelle pour **VMWare** disponible à TODO [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
+
+**IMPORTANT:**
+Voici les informations de connexion :
+
+```
+Username: student
+Password: student
+```
+
+Pour plus d'information sur la mise en place des machines virtuelles, voir le notebook `ConfigurationVM`.
+
+**En simulation:** Dans la machine virtuelle, ouvrez un terminal (`CTRL-ALT-T`), et entrez les commandes:
+
+```bash
+cd ~/catkin_ws && git pull
+cd ~/glo4001
+git pull
+source venv/bin/activate
+jupyter notebook
+```
 
 ## Architecture logicielle
 
@@ -60,7 +83,12 @@ en trouverez un résumé dans le schéma suivant.
 
 <img src="doc/software_architecture.png" width="800" ></img>
 
-Votre ordinateur de bord communique avec la `kobuki` à travers un logiciel nommé ROS (pour *Robot Operating System*). Il nous suffit donc de parler à l'ordinateur de bord avec une connexion websocket, et le tour est joué.
+Votre ordinateur de bord communique avec la `kobuki` à travers un logiciel nommé ROS (pour *Robot Operating System*).
+Il nous suffit donc de parler à l'ordinateur de bord avec une connexion websocket, et le tour est joué.
+
+**En simulation:** Le simulateur vient émuler la plate-forme robotique et l'ordinateur de bord du `kobuki`.
+Le principe reste le même: on ouvre une connexion websocket avec le simulateur et l'on peut interagir avec ROS comme s'il
+s'agissait d'une vraie plate-forme robotique.
 
 Nous utiliserons le code python à travers un *jupyter notebook*. Jupyter est un
 environnement interactif qui permet d'entremêler du code, le résultat de son
@@ -73,6 +101,9 @@ exécution et du texte. Voici un exemple de *jupyter notebook* à l'oeuvre.
 Dans cette section nous verrons comment installer *jupyter* et la librairie
 *robmob* sur votre ordinateur.
 
+**En simulation :** La machine virtuelle est déjà configurée avec tout ce qu'il faut. Vous n'avez donc pas à installer
+ces dépendances sur votre propre ordinateur.
+
 ### Linux (Ubuntu)
 
 Les instructions qui suivent sont spécifiques à Ubuntu mais devraient bien se 
@@ -80,11 +111,11 @@ généraliser à d'autres distributions (et peut-être même MacOS).
 
 #### Acquisition du code des laboratoires
 
-Dans un autre dossier, lancez la commande
+Dans un terminal, exécutez les commandes suivantes:
 
 ```bash
-$ git clone https://github.com/norlab-ulaval/glo4001
-$ cd glo4001
+git clone https://github.com/norlab-ulaval/glo4001
+cd glo4001
 ```
 
 #### Création d'un environnement virtuel python3
@@ -94,7 +125,8 @@ contient les logiciels nécessaires pour faire les laboratoires. Assurez-vous
 d'abord d'avoir les paquets suivants:
 
 ```bash
-$ sudo apt install python3-pip python3-venv python3-testresources
+sudo apt update
+sudo apt install python3-pip python3-venv python3-testresources
 ```
 
 Ensuite, créez un environnement virtuel avec la commande suivante.
@@ -109,25 +141,27 @@ Activez l'environment avec:
 $ source venv/bin/activate
 ```
 
-Vous devrez activer l'environnement avant de débuter chaque laboratoire.
+**IMPORTANT :** Vous devrez activer l'environnement avant de commencer chaque laboratoire.
 
 Si l'activation a réussi, vous verrez `(venv)` à la gauche de votre invite de commande.
 
-Le dépôt contient un fichier `requirements.txt` qui contient la liste des libraries python dont on a besoin pour exécuter le code fourni. Heureusement, on peut les installer automatiquement avec une commande. Assurez-vous d'avoir activé l'environnement virtuel avant de lancer cette commande.
+Le dépôt contient un fichier `requirements.txt` qui contient la liste des libraries python dont on a besoin pour exécuter le code fourni.
+Heureusement, on peut les installer automatiquement avec une commande. 
+Assurez-vous d'avoir activé l'environnement virtuel avant de lancer cette commande.
 
 ```bash
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 #### Lancer jupyter (linux)
 
 Si tout a réussi, votre environnement virtuel contient désormais toutes les
 librairies nécessaires. Vous pouvez le tester en tentant de lancer le *jupyter
-notebook* (toujours avec l'environnement virtel activé). Lancez cette commande à
-partir de l'intérieur du repo `glo4001`.
+notebook* (**toujours avec l'environnement virtuel activé**). Lancez cette commande à
+partir de l'intérieur du dossier `glo4001`.
 
 ```bash
-$ jupyter notebook
+jupyter notebook
 ```
 
 Avec un peu de chance, votre navigateur web devrait ouvrir un nouvel onglet pointant sur le notebook *jupyter*. 
@@ -189,5 +223,13 @@ jupyter notebook
 ## Lancer un laboratoire
 
 Dans le *jupyter notebook*, ouvrez le fichier *Laboratoire 0.ipynb*. La suite des
-instructions, incluant comment interagir avec le robot, s'y trouve. Bonne
-chance!
+instructions, incluant comment interagir avec le robot, s'y trouve. 
+
+**En simulation :** Ouvrez un terminal (`CTRL-ALT-T`), et entrez les commandes:
+
+```bash
+cd glo4001
+jupyter notebook
+```
+
+Bonne chance!

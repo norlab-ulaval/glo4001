@@ -22,10 +22,15 @@
   - Utilisation de robmob
   - Introduction a matplotlib
 * Plan de la séance
+- Pour ceux qui utilisent les ordinateurs du laboratoire: utilisez VMWare
+- *Pour ceux qui utilisent VMWare*: En cas d'erreur de kernel. Ouvrir le fichier .vmx dans les dossier contenant la machine virtuelle. Changer TRUE pour FALSE a la ligne 22.
+- *Pour ceux qui utilisent VMWare*: Puisque le port forwarding ne fonctionne pas sur vmware, il faut tout faire dans la machine virtuelle (Faire les etapes d'installation dans la VM)
 - Laboratoires: https://github.com/norlab-ulaval/glo4001
 - *Télécharger la machine virtuelle du cours (~6Gb)!*
 - Suivre les instructions du README
 - Suivre le Laboratoire 0.ipynb
 - *Mettre à jour le code du simulateur!*
+    cd ~/catkin_ws
+    git pull
 - *Important de bien comprendre comment lancer le simulateur!*
 - Disponible pour répondre aux questions

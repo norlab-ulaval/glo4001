@@ -50,10 +50,10 @@ capteur LiDAR.
 Il est aussi possible d'un simulateur plutôt que la base `kobuki`.
 
 **Si vous utilisez votre propre ordinateur :** 
-Téléchargez la machine virtuelle pour **VirtualBox** disponible à TODO [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
+Téléchargez la machine virtuelle pour **VirtualBox** disponible à [Machine Virtuelle VirtualBox](https://ulavaldti-my.sharepoint.com/personal/wigum_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fwigum%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvirtualbox%5Fv3%2Ezip&parent=%2Fpersonal%2Fwigum%5Fulaval%5Fca%2FDocuments&ga=1).
 
 **Si vous utilisez un ordinateur du laboratoire informatique :** 
-Téléchargez la machine virtuelle pour **VMWare** disponible à TODO [cette adresse](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip).
+Téléchargez la machine virtuelle pour **VMWare** disponible à [Machine Virtuelle VMWare](https://ulavaldti-my.sharepoint.com/personal/phgig4_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvmware%5Fv3%2Ezip&parent=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments&ga=1).
 
 **IMPORTANT:**
 Voici les informations de connexion :

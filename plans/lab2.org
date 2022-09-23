@@ -1,4 +1,4 @@
-#+title: Lab0
+#+title: Lab2
 #+author: William Guimont-Martin
 
 * Buts du laboratoire

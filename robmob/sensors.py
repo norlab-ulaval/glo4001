@@ -1,10 +1,10 @@
 import base64
 import collections
-import math
 import time
 from abc import ABC, abstractmethod
 from io import BytesIO
 
+import math
 import numpy as np
 from PIL import Image
 
@@ -170,7 +170,12 @@ class GyroSensor(Sensor):
     SAMPLE_RATE = 108
     SAMPLE_RATE_SIM = 930
 
-    def __init__(self, buffer_size=200):
+    def __init__(self, buffer_size=None):
+        if buffer_size is None:
+            if IN_SIMULATION:
+                buffer_size = int(self.SAMPLE_RATE_SIM * 2)
+            else:
+                buffer_size = int(self.SAMPLE_RATE_SIM * 2.5)
         super().__init__(buffer_size)
 
     def parse_message(self, message):

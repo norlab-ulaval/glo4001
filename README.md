@@ -54,9 +54,6 @@ Téléchargez la machine virtuelle pour **VirtualBox** disponible à [Machine Vi
 
 Lien de la VM v2: [glo4001-virtualbox-v2](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip)
 
-
-Lien de la VM v2: [glo4001-virtualbox-v2](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip)
-
 **Si vous utilisez un ordinateur du laboratoire informatique :**
 Téléchargez la machine virtuelle pour **VMWare** disponible à [Machine Virtuelle VMWare v3](https://ulavaldti-my.sharepoint.com/personal/phgig4_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvmware%5Fv3%2Ezip&parent=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments&ga=1).
 

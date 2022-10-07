@@ -7,6 +7,4 @@
 - Listes numpy
 - Intégration des encodeurs
 * Plan de la séance
-- *IMPORTANT* mettre à jour le code du laboratoire! https://github.com/norlab-ulaval/glo4001
-  - Télécharger de nouveau le ZIP du code des laboratoires
 - Disponible pour répondre aux questions

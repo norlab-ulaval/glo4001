@@ -13,30 +13,30 @@ Le responsable des laboratoires est William Guimont-Martin (william.guimont-mart
 **Table des matières**
 
 - [Laboratoires des cours GLO-4001 et GLO-7021](#laboratoires-des-cours-glo-4001-et-glo-7021)
-- [Introduction](#introduction)
-- [Machine virtuelle et simulateur](#machine-virtuelle-et-simulateur)
-- [Architecture logicielle](#architecture-logicielle)
-- [Installation](#installation)
-  - [Linux (Ubuntu)](#linux-ubuntu)
-    - [Acquisition du code des laboratoires](#acquisition-du-code-des-laboratoires)
-    - [Création d'un environnement virtuel python3](#création-dun-environnement-virtuel-python3)
-    - [Lancer jupyter (linux)](#lancer-jupyter-linux)
-  - [Windows](#windows)
-    - [Installation de anaconda](#installation-de-anaconda)
-    - [Téléchargement du code du cours](#téléchargement-du-code-du-cours)
-    - [Installation des librairies nécessaires](#installation-des-librairies-nécessaires)
-    - [Lancer jupyter (windows)](#lancer-jupyter-windows)
-- [Lancer un laboratoire](#lancer-un-laboratoire)
+  - [Introduction](#introduction)
+  - [Machine virtuelle et simulateur](#machine-virtuelle-et-simulateur)
+  - [Architecture logicielle](#architecture-logicielle)
+  - [Installation](#installation)
+    - [Linux (Ubuntu)](#linux-ubuntu)
+      - [Acquisition du code des laboratoires](#acquisition-du-code-des-laboratoires)
+      - [Création d'un environnement virtuel python3](#création-dun-environnement-virtuel-python3)
+      - [Lancer jupyter (linux)](#lancer-jupyter-linux)
+    - [Windows](#windows)
+      - [Installation de anaconda](#installation-de-anaconda)
+      - [Téléchargement du code du cours](#téléchargement-du-code-du-cours)
+      - [Installation des librairies nécessaires](#installation-des-librairies-nécessaires)
+      - [Lancer jupyter (windows)](#lancer-jupyter-windows)
+  - [Lancer un laboratoire](#lancer-un-laboratoire)
 
 <!-- markdown-toc end -->
-    
+
 ## Introduction
 
-Cette série de laboratoires vous fera expérimenter certains aspects vus dans le cours de robotique mobile. 
+Cette série de laboratoires vous fera expérimenter certains aspects vus dans le cours de robotique mobile.
 
-**En simulation :** Nous avons un simulateur permettant d'expérimenter avec des robots virtuel. Un simulateur 
-de robotique est un outil extrêmement pratique pour, entre autres, 
-tester des algorithmes, expérimenter dans différents environments, 
+**En simulation :** Nous avons un simulateur permettant d'expérimenter avec des robots virtuel. Un simulateur
+de robotique est un outil extrêmement pratique pour, entre autres,
+tester des algorithmes, expérimenter dans différents environments,
 entraîner des modèles d'apprentissage automatique et valider son code.
 
 **Avec une plate-forme robotique :** Nous disposons de plate-formes robotiques
@@ -49,13 +49,14 @@ capteur LiDAR.
 
 Il est aussi possible d'un simulateur plutôt que la base `kobuki`.
 
-**Si vous utilisez votre propre ordinateur :** 
+**Si vous utilisez votre propre ordinateur :**
 Téléchargez la machine virtuelle pour **VirtualBox** disponible à [Machine Virtuelle VirtualBox v3](https://ulavaldti-my.sharepoint.com/personal/wigum_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fwigum%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvirtualbox%5Fv3%2Ezip&parent=%2Fpersonal%2Fwigum%5Fulaval%5Fca%2FDocuments&ga=1).
 
 Lien de la VM v2: [glo4001-virtualbox-v2](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip)
 
-**Si vous utilisez un ordinateur du laboratoire informatique :** 
+**Si vous utilisez un ordinateur du laboratoire informatique :**
 Téléchargez la machine virtuelle pour **VMWare** disponible à [Machine Virtuelle VMWare v3](https://ulavaldti-my.sharepoint.com/personal/phgig4_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvmware%5Fv3%2Ezip&parent=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments&ga=1).
+
 
 **IMPORTANT:**
 Voici les informations de connexion :
@@ -108,7 +109,7 @@ ces dépendances sur votre propre ordinateur.
 
 ### Linux (Ubuntu)
 
-Les instructions qui suivent sont spécifiques à Ubuntu mais devraient bien se 
+Les instructions qui suivent sont spécifiques à Ubuntu mais devraient bien se
 généraliser à d'autres distributions (et peut-être même MacOS).
 
 #### Acquisition du code des laboratoires
@@ -148,7 +149,7 @@ $ source venv/bin/activate
 Si l'activation a réussi, vous verrez `(venv)` à la gauche de votre invite de commande.
 
 Le dépôt contient un fichier `requirements.txt` qui contient la liste des libraries python dont on a besoin pour exécuter le code fourni.
-Heureusement, on peut les installer automatiquement avec une commande. 
+Heureusement, on peut les installer automatiquement avec une commande.
 Assurez-vous d'avoir activé l'environnement virtuel avant de lancer cette commande.
 
 ```bash
@@ -166,10 +167,10 @@ partir de l'intérieur du dossier `glo4001`.
 jupyter notebook
 ```
 
-Avec un peu de chance, votre navigateur web devrait ouvrir un nouvel onglet pointant sur le notebook *jupyter*. 
+Avec un peu de chance, votre navigateur web devrait ouvrir un nouvel onglet pointant sur le notebook *jupyter*.
 Bien joué! Maintenant, vous pouvez ouvrir le fichier `Laboratoire 0.ipynb` et vous connecter à votre robot.
 
-Si vous obtenez une erreur comme quoi jupyter n'est pas une commande, 
+Si vous obtenez une erreur comme quoi jupyter n'est pas une commande,
 ouvrez le fichier `.bashrc` avec `gedit ~/.bashrc`. Ensuit, ajoutez-y la ligne suivante à la toute fin:
 
 ```bash
@@ -221,11 +222,11 @@ Depuis la *anaconda prompt*, allez dans le dossier contenant le code du cours, p
 ```
 jupyter notebook
 ```
-    
+
 ## Lancer un laboratoire
 
 Dans le *jupyter notebook*, ouvrez le fichier *Laboratoire 0.ipynb*. La suite des
-instructions, incluant comment interagir avec le robot, s'y trouve. 
+instructions, incluant comment interagir avec le robot, s'y trouve.
 
 **En simulation :** Ouvrez un terminal (`CTRL-ALT-T`), et entrez les commandes:
 

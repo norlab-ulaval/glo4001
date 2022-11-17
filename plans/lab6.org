@@ -1,0 +1,11 @@
+#+title: Lab6
+#+author: William Guimont-Martin
+
+* Buts du laboratoire
+- Laboratoire TRÈS important
+- EKF!
+- Il faut s'assurer de bien comprendre le filtre de Kalman et le EKF!
+* Plan de la séance
+- *IMPORTANT* mettre à jour le code du laboratoire! https://github.com/norlab-ulaval/glo4001
+  - Télécharger de nouveau le ZIP du code des laboratoires
+- Disponible pour répondre aux questions

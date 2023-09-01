@@ -47,8 +47,6 @@ capteur LiDAR.
 
 ## Machine virtuelle et simulateur
 
-Il est aussi possible d'un simulateur plutôt que la base `kobuki`.
-
 **Si vous utilisez votre propre ordinateur :**
 Téléchargez la machine virtuelle pour **VirtualBox** disponible à [Machine Virtuelle VirtualBox v3](https://ulavaldti-my.sharepoint.com/personal/wigum_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fwigum%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvirtualbox%5Fv3%2Ezip&parent=%2Fpersonal%2Fwigum%5Fulaval%5Fca%2FDocuments&ga=1).
 
@@ -56,6 +54,7 @@ Lien de la VM v2: [glo4001-virtualbox-v2](http://www2.ift.ulaval.ca/~pgiguere/do
 
 **Si vous utilisez un ordinateur du laboratoire informatique :**
 Téléchargez la machine virtuelle pour **VMWare** disponible à [Machine Virtuelle VMWare v3](https://ulavaldti-my.sharepoint.com/personal/phgig4_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvmware%5Fv3%2Ezip&parent=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments&ga=1).
+Tous les fichiers que vous désirez conserver doivent être dans votre dossier OneDrive, **sinon ils seront supprimés par le système informatique.**
 
 
 **IMPORTANT:**
@@ -66,9 +65,11 @@ Username: student
 Password: student
 ```
 
+**IMPORTANT:** Ne pas faire les mises-à-jour sur les machines virtuelles.
+
 Pour plus d'information sur la mise en place des machines virtuelles, voir le notebook `ConfigurationVM`.
 
-**En simulation:** Dans la machine virtuelle, ouvrez un terminal (`CTRL-ALT-T`), et entrez les commandes:
+Dans la machine virtuelle, ouvrez un terminal (`CTRL-ALT-T`), et entrez les commandes :
 
 ```bash
 cd ~/catkin_ws && git pull
@@ -77,6 +78,11 @@ git pull
 source venv/bin/activate
 jupyter notebook
 ```
+
+**Vous devrez exécuter ces lignes à chaque début de laboratoire!**
+
+Dans le *jupyter notebook*, ouvrez le fichier *Laboratoire 0.ipynb*. La suite des
+instructions, incluant comment interagir avec le robot, s'y trouve.
 
 ## Architecture logicielle
 
@@ -100,6 +106,8 @@ exécution et du texte. Voici un exemple de *jupyter notebook* à l'oeuvre.
 <img src="doc/jupyterexample.png"></img>
 
 ## Installation
+
+**IMPORTANT: Vous n'avez pas à suivre cette section si vous utilisez la machine virtuelle**
 
 Dans cette section nous verrons comment installer *jupyter* et la librairie
 *robmob* sur votre ordinateur.

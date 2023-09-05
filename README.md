@@ -48,12 +48,12 @@ capteur LiDAR.
 ## Machine virtuelle et simulateur
 
 **Si vous utilisez votre propre ordinateur :**
-Téléchargez la machine virtuelle pour **VirtualBox** disponible à [Machine Virtuelle VirtualBox v3](https://ulavaldti-my.sharepoint.com/personal/wigum_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fwigum%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvirtualbox%5Fv3%2Ezip&parent=%2Fpersonal%2Fwigum%5Fulaval%5Fca%2FDocuments&ga=1).
+Téléchargez la machine virtuelle pour **VirtualBox** disponible à [Machine Virtuelle VirtualBox v3](https://ulavaldti-my.sharepoint.com/:u:/g/personal/wigum_ulaval_ca/EYQpkPsRKL1GlxzyoQQNUj8B-GOfM4oa2a5-BQnWEbkf9A?e=eS72gP).
 
 Lien de la VM v2: [glo4001-virtualbox-v2](http://www2.ift.ulaval.ca/~pgiguere/download/glo4001-v2.zip)
 
 **Si vous utilisez un ordinateur du laboratoire informatique :**
-Téléchargez la machine virtuelle pour **VMWare** disponible à [Machine Virtuelle VMWare v3](https://ulavaldti-my.sharepoint.com/personal/phgig4_ulaval_ca/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments%2Fglo4001%5Fvmware%5Fv3%2Ezip&parent=%2Fpersonal%2Fphgig4%5Fulaval%5Fca%2FDocuments&ga=1).
+Téléchargez la machine virtuelle pour **VMWare** disponible à [Machine Virtuelle VMWare v3](https://ulavaldti-my.sharepoint.com/:u:/g/personal/wigum_ulaval_ca/EZkfr_HfKLJAsYOqXYXnAIkBkjhUWwmjHitjCkG8OISnVA?e=uO7EXK).
 Tous les fichiers que vous désirez conserver doivent être dans votre dossier OneDrive, **sinon ils seront supprimés par le système informatique.**
 
 

@@ -42,7 +42,7 @@ entraîner des modèles d'apprentissage automatique et valider son code.
 **Avec une plate-forme robotique :** Nous disposons de plate-formes robotiques
 *Kobuki* de la compagnie iClebo. Toutes les plate-formes disposent d'un
 ordinateur de bord *Kangaroo*, une paire de capteurs infra-rouge, une caméra
-*Kinect* et un IMU intégré. Ce plus, certaines plate-formes sont équipées avec un
+*Kinect* et un IMU intégré. De plus, certaines plate-formes sont équipées avec un
 capteur LiDAR.
 
 ## Machine virtuelle et simulateur

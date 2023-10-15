@@ -207,8 +207,7 @@ class KinectDepthSensor(Sensor):
     TOPIC = '/camera/depth/image_raw/compressedDepth' if IN_SIMULATION else '/kinect_depth_compressed'
     MESSAGE_TYPE = 'sensor_msgs/CompressedImage' if IN_SIMULATION else 'sensor_msgs/CompressedImage'
     SAMPLE_RATE = 5
-    FOV_X = 365.456
-    FOV_Y = 365.456
+    FOCAL_LENGTH = 365.456
     CENTER_X = 254.878
     CENTER_Y = 205.395
 

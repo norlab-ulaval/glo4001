@@ -12,6 +12,11 @@ from robmob.simulation import IN_SIMULATION
 
 
 class Sensor(ABC):
+    # Overwrite in implementations
+    TOPIC = ''
+    MESSAGE_TYPE = ''
+    SAMPLE_RATE = 0
+
     def __init__(self, buffer_size):
         self.buffer_size = buffer_size
         self.buffer = collections.deque([], maxlen=buffer_size)

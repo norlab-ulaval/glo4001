@@ -26,8 +26,7 @@ class Robot:
         try:
             urllib.parse.urlparse(self.robot_url)
         except ValueError:
-            print("L'adresse IP fournie est invalide")
-            print(self.robot_url)
+            raise ValueError(f"Robot address {robot_ip}:{port} is not valid")
 
     def connect(self):
         self.ws = websocket.WebSocketApp(self.robot_url,
@@ -40,9 +39,9 @@ class Robot:
 
         _thread.start_new_thread(self.ws.run_forever, ())
 
+        # on_error will set self.connecting to false if we timeout.
         while not self.connection_established and self.connecting:
             time.sleep(0.2)
-            # on_error will set self.connecting to false if we timeout.
 
     def add_sensor(self, sensor):
         self.ws.send(json.dumps(sensor.subscription_message))

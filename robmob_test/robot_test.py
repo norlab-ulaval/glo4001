@@ -1,16 +1,14 @@
 import ast
 import time
 
-import numpy as np
-
 from robmob.robot import Robot
 import unittest
 
-from robmob.sensors import Sensor
+from robmob.kobuki.sensors import Sensor
 
 
 class RobotEspSensor(Sensor):
-    TOPIC = '/rover'
+    TOPIC = '/rover/state'
     MESSAGE_TYPE = 'std_msgs/msg/String'
     SAMPLE_RATE = 10
 
@@ -19,8 +17,7 @@ class RobotEspSensor(Sensor):
 
     def parse_message(self, message):
         data = message['msg']['data']
-        d = ast.literal_eval(data)
-        return {k: d[k] for k in ('rax', 'ray', 'raz', 'mx', 'my', 'mz', 'rgx', 'rgy', 'rgz')}
+        return ast.literal_eval(data)
 
 
 class TestRobot(unittest.TestCase):
@@ -29,12 +26,6 @@ class TestRobot(unittest.TestCase):
         robot.connect()
         self.assertTrue(robot.connection_established)
 
-    def test_send_message(self):
-        robot = Robot('localhost', port=9090)
-        robot.connect()
-        robot.linear_movement(0.3, 1)
-        self.assertTrue(False)
-
     def test_receive_msg(self):
         robot = Robot('localhost', port=9090)
         robot.connect()
@@ -42,7 +33,30 @@ class TestRobot(unittest.TestCase):
         sensor = RobotEspSensor()
         robot.add_sensor(sensor)
 
-        time.sleep(0.1)
+        time.sleep(1)
         msg = sensor.peek_data()
 
-        self.assertTrue(all(k in msg for k in ('rax', 'ray', 'raz', 'mx', 'my', 'mz', 'rgx', 'rgy', 'rgz')))
+        self.assertTrue(
+            all(k in msg for k in ('rax', 'ray', 'raz', 'mx', 'my', 'mz', 'rgx', 'rgy', 'rgz', 'odl', 'odr')))
+
+    def test_send_message(self):
+        robot = Robot('localhost', port=9090)
+        robot.connect()
+
+        sensor = RobotEspSensor()
+        robot.add_sensor(sensor)
+
+        time.sleep(0.1)
+        start = sensor.peek_data()
+
+        robot.send_command(MovementFloatCommand(0.5, 0.5))
+        time.sleep(1)
+        robot.send_command(ResetCommand())
+
+        end = sensor.peek_data()
+
+        dodl = end['odl'] - start['odl']
+        dodr = end['odr'] - start['odr']
+
+        self.assertTrue(dodl > 0)
+        self.assertTrue(dodr > 0)

@@ -6,8 +6,9 @@ import urllib.parse
 
 import websocket
 
-from robmob.commands import CommandPublisher, LinearMovementCommand, ResetCommand, RotationCommand, MovementCommand
-from robmob.sensors import FullOdomSensor
+from robmob.commands import CommandPublisher
+from robmob.kobuki.commands import LinearMovementCommand, ResetCommand, RotationCommand, MovementCommand
+from robmob.kobuki.sensors import FullOdomSensor
 from robmob.simulation import IN_SIMULATION
 
 

@@ -28,7 +28,7 @@ class MovementCommand(RoverCommand):
 class ResetCommand(RoverCommand):
     def __init__(self):
         super().__init__(Command.SEND_ONCE)
-        self._set_message({"T": 13, "X": 0, "Y": 0})
+        self._set_message({"T": 11, "X": 0, "Y": 0})
 
 
 class MovementFloatCommand(RoverCommand):

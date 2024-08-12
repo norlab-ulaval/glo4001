@@ -38,5 +38,5 @@ class Command:
             'topic': self.COMMAND_TOPIC
         }
 
-    def _set_message(self, twist):
-        self.message_to_publish['msg'] = twist.message
+    def _set_message(self, msg):
+        self.message_to_publish['msg'] = msg.message

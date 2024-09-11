@@ -53,26 +53,30 @@ class SharpSensor(Sensor):
     MESSAGE_TYPE = 'sensor_msgs/LaserScan' if IN_SIMULATION else 'kobuki_msgs/SensorState'
     SAMPLE_RATE = 50
 
+    # TODO which table to use?
     # Calibration table of the high range sharp sensor, for 15+ cm.
-    HIGH_RANGE_CALIB_TABLE = np.asarray([
-        [15, 2.76],
-        [20, 2.53],
-        [30, 1.99],
-        [40, 1.53],
-        [50, 1.23],
-        [60, 1.04],
-        [70, 0.91],
-        [80, 0.82],
-        [90, 0.72],
-        [100, 0.66],
-        [110, 0.6],
-        [120, 0.55],
-        [130, 0.50],
-        [140, 0.46],
-        [150, 0.435],
-        [200, 0],
-        [np.inf, 0]
-    ])
+    # HIGH_RANGE_CALIB_TABLE = np.asarray([
+    #     [15, 2.76],
+    #     [20, 2.53],
+    #     [30, 1.99],
+    #     [40, 1.53],
+    #     [50, 1.23],
+    #     [60, 1.04],
+    #     [70, 0.91],
+    #     [80, 0.82],
+    #     [90, 0.72],
+    #     [100, 0.66],
+    #     [110, 0.6],
+    #     [120, 0.55],
+    #     [130, 0.50],
+    #     [140, 0.46],
+    #     [150, 0.435],
+    #     [200, 0],
+    #     [np.inf, 0]
+    # ])
+    HIGH_RANGE_CALIB_TABLE = np.asarray(
+        [[15, 2.76], [20, 2.53], [30, 1.99], [40, 1.53], [50, 1.23], [60, 1.04], [70, 0.91], [80, 0.82], [90, 0.72],
+         [100, 0.66], [110, 0.6], [120, 0.55], [130, 0.50], [140, 0.46], [150, 0.435], [150, 0]])
 
     def __init__(self, analog_input_id=0, buffer_size=100):
         """

@@ -6,7 +6,7 @@ import unittest
 
 from robmob.kobuki.sensors import Sensor
 from robmob.rover.commands import MovementFloatCommand, ResetCommand, MovementCommand, MovementPWMCommand
-from robmob.rover.sensors import RobotEspSensor
+from robmob.rover.sensors import RobotEspSensor, SharpSensor
 
 
 class TestRobot(unittest.TestCase):
@@ -14,6 +14,17 @@ class TestRobot(unittest.TestCase):
         robot = Robot('localhost', port=9090)
         robot.connect()
         self.assertTrue(robot.connection_established)
+
+    def test_range(self):
+        robot = Robot('localhost', port=9090)
+        robot.connect()
+
+        sensor = SharpSensor()
+        robot.add_sensor(sensor)
+
+        time.sleep(2)
+        msg = sensor.peek_data()
+        assert isinstance(msg, float)
 
     def test_receive_msg(self):
         robot = Robot('localhost', port=9090)

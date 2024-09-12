@@ -1,14 +1,9 @@
-Description="Start Jupyter Notebook"
-
-Wants=network.target
+[Unit]
+Description=hit service
 After=network-online.target
 
 [Service]
-Type=simple
 ExecStart=/home/norlab/glo4001/scripts/jupyter.sh
-Restart=on-failure
-RestartSec=10
-KillMode=process
 
 [Install]
 WantedBy=multi-user.target

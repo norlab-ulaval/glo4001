@@ -1,14 +1,9 @@
-Description="Start ROS Rover"
-
-Wants=network.target
+[Unit]
+Description=hit service
 After=network-online.target
 
 [Service]
-Type=simple
 ExecStart=/home/norlab/glo4001/scripts/ros_rover.sh
-Restart=on-failure
-RestartSec=10
-KillMode=process
 
 [Install]
 WantedBy=multi-user.target

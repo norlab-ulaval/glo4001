@@ -9,8 +9,6 @@ sudo cp ~/glo4001/scripts/jupyter.service /etc/systemd/system/jupyter.service
 sudo cp ~/glo4001/scripts/ros_rover.service /etc/systemd/system/ros_rover.service
 
 sudo chmod 777 -R /tmp
-export ROS_LOG_DIR=/home/norlab/log
-export ROS_HOME=/home/norlab/
 
 sudo systemctl daemon-reload
 

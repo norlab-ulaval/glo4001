@@ -5,7 +5,7 @@ After=syslog.target network-online.target
 
 [Service]
 Type=simple
-ExecStart=cd ~/glo4001 && source venv/bin/activate && jupyter notebook
+ExecStart=~/glo4001/scripts/jupyter.sh
 Restart=on-failure
 RestartSec=10
 KillMode=process

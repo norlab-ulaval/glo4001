@@ -5,7 +5,7 @@ After=syslog.target network-online.target
 
 [Service]
 Type=simple
-ExecStart=cd ~/ros2_ws/ && ros2 launch rover_launchers rover_base_launch.xml
+ExecStart=~/glo4001/scripts/ros_rover.sh
 Restart=on-failure
 RestartSec=10
 KillMode=process

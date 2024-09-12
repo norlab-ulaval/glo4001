@@ -1,7 +1,7 @@
-Description=Start Jupyter Notebook
+Description="Start Jupyter Notebook"
 
 Wants=network.target
-After=syslog.target network-online.target
+After=network-online.target
 
 [Service]
 Type=simple

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-sudo apt install -y python3.8-venv python3.8-pip
+sudo apt install -y python3.8-venv
 cd ~/glo4001
 python3 -m venv venv
 source venv/bin/activate

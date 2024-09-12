@@ -8,7 +8,7 @@ pip install -r requirements.txt
 sudo cp ~/glo4001/scripts/jupyter.service /etc/systemd/system/jupyter.service
 sudo cp ~/glo4001/scripts/ros_rover.service /etc/systemd/system/ros_rover.service
 
-chmod 777 -R /tmp
+sudo chmod 777 -R /tmp
 
 sudo systemctl daemon-reload
 

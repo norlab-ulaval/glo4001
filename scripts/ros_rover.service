@@ -1,8 +1,9 @@
 [Unit]
-Description=hit service
+Description=ROS
 After=network-online.target
 
 [Service]
+Type=forking
 ExecStart=/home/norlab/glo4001/scripts/ros_rover.sh
 
 [Install]

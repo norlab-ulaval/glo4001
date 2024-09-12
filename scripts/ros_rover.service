@@ -1,0 +1,14 @@
+Description=Start ROS Rover
+
+Wants=network.target
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+ExecStart=cd ~/ros2_ws/ && ros2 launch rover_launchers rover_base_launch.xml
+Restart=on-failure
+RestartSec=10
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

@@ -5,7 +5,7 @@ After=syslog.target network-online.target
 
 [Service]
 Type=simple
-ExecStart=~/glo4001/scripts/ros_rover.sh
+ExecStart=/home/norlab/glo4001/scripts/ros_rover.sh
 Restart=on-failure
 RestartSec=10
 KillMode=process

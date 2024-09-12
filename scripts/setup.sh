@@ -15,3 +15,6 @@ sudo systemctl enable ros_rover
 
 sudo systemctl start jupyter
 sudo systemctl start ros_rover
+
+cd ~/ros2_ws
+./symlink_build.sh

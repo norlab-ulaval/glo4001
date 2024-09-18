@@ -8,23 +8,13 @@ Les responsables des laboratoires sont William Guimont-Martin (william.guimont-m
 Larrivée-Hardy (william.larrivee-hardy@norlab.ulaval.ca).
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table des matières**
+**Table of Contents**
 
 - [Laboratoires des cours GLO-4001 et GLO-7021](#laboratoires-des-cours-glo-4001-et-glo-7021)
     - [Introduction](#introduction)
-    - [Machine virtuelle et simulateur](#machine-virtuelle-et-simulateur)
+    - [Lancer les laboratoires](#lancer-les-laboratoires)
     - [Architecture logicielle](#architecture-logicielle)
-    - [Installation](#installation)
-        - [Linux (Ubuntu)](#linux-ubuntu)
-            - [Acquisition du code des laboratoires](#acquisition-du-code-des-laboratoires)
-            - [Création d'un environnement virtuel python3](#création-dun-environnement-virtuel-python3)
-            - [Lancer jupyter (linux)](#lancer-jupyter-linux)
-        - [Windows](#windows)
-            - [Installation de anaconda](#installation-de-anaconda)
-            - [Téléchargement du code du cours](#téléchargement-du-code-du-cours)
-            - [Installation des librairies nécessaires](#installation-des-librairies-nécessaires)
-            - [Lancer jupyter (windows)](#lancer-jupyter-windows)
-    - [Lancer un laboratoire](#lancer-un-laboratoire)
+- [Machine virtuelle et simulateur](#machine-virtuelle-et-simulateur)
 
 <!-- markdown-toc end -->
 

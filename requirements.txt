@@ -6,3 +6,4 @@ pillow
 scipy
 matplotlib
 pyserial
+opencv-python

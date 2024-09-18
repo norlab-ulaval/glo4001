@@ -1,6 +1,9 @@
 import ast
+import base64
+from io import BytesIO
 
 import numpy as np
+from PIL import Image
 
 from robmob.sensors import Sensor
 
@@ -53,3 +56,40 @@ class SharpSensor(Sensor):
 
     def parse_message(self, message):
         return float(message['msg']['data'])
+
+
+class CameraRGBSensor(Sensor):
+    TOPIC = '/color/video/image/compressed'
+    MESSAGE_TYPE = 'sensor_msgs/msg/CompressedImage'
+    SAMPLE_RATE = 30
+
+    def __init__(self, buffer_size=60):
+        super().__init__(buffer_size)
+
+    def parse_message(self, message):
+        image_data = message['msg']['data']
+        decompressed_image = Image.open(BytesIO(base64.b64decode(image_data)))
+        return decompressed_image
+
+
+class CameraDepthSensor(Sensor):
+    # TOPIC = '/stereo/depth'
+    # MESSAGE_TYPE = ('sensor_msgs/msg/Image')
+    TOPIC = '/stereo/depth/compressedDepth'
+    MESSAGE_TYPE = ('sensor_msgs/msg/CompressedImage')
+    SAMPLE_RATE = 30
+
+    def __init__(self, buffer_size=60):
+        super().__init__(buffer_size)
+
+    def parse_message(self, message):
+        msg = message['msg']
+        base64_bytes = msg['data'].encode('ascii')
+        image_bytes = base64.b64decode(base64_bytes)
+        with open('a.jpg', 'wb') as image_file:
+            image_file.write(image_bytes)
+        # compressed_str = message['msg']['data']
+        # compressed_data = base64.b64decode(compressed_str)
+        # np_arr = np.frombuffer(compressed_data, np.uint8)
+        # depth_image = cv2.imdecode(np_arr, cv2.IMREAD_UNCHANGED)
+        # return depth_image

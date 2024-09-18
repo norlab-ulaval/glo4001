@@ -1,12 +1,12 @@
-import ast
 import time
-
-from robmob.robot import Robot
 import unittest
 
-from robmob.kobuki.sensors import Sensor
-from robmob.rover.commands import MovementFloatCommand, ResetCommand, MovementCommand, MovementPWMCommand
-from robmob.rover.sensors import RobotEspSensor, SharpSensor
+import matplotlib.pyplot as plt
+import numpy as np
+
+from robmob.robot import Robot
+from robmob.rover.commands import ResetCommand, MovementPWMCommand
+from robmob.rover.sensors import RobotEspSensor, SharpSensor, CameraRGBSensor, CameraDepthSensor
 
 
 class TestRobot(unittest.TestCase):
@@ -82,4 +82,35 @@ class TestRobot(unittest.TestCase):
 
         import matplotlib.pyplot as plt
         plt.plot(gz)
+        plt.show()
+
+    def test_camera_rgb(self):
+        robot = Robot('localhost', port=9090)
+        robot.connect()
+
+        sensor = CameraRGBSensor()
+        robot.add_sensor(sensor)
+        time.sleep(3)
+
+        img = sensor.peek_data()
+        print(img)
+        assert img is not None
+        assert img.size == (1920, 1080)
+
+    def test_camera_depth(self):
+        robot = Robot('localhost', port=9090)
+        robot.connect()
+
+        sensor = CameraDepthSensor()
+        robot.add_sensor(sensor)
+        time.sleep(3)
+        while True:
+            ...
+
+        img = sensor.peek_data()
+        print(img)
+        assert img is not None
+        assert img.size == (640, 480)
+        x = np.array(img)
+        plt.hist(x.flatten(), bins=256)
         plt.show()

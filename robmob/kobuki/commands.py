@@ -1,7 +1,3 @@
-import _thread
-import json
-import time
-
 from robmob.commands import Command
 from robmob.simulation import IN_SIMULATION
 

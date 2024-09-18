@@ -1,9 +1,6 @@
 import time
 import unittest
 
-import matplotlib.pyplot as plt
-import numpy as np
-
 from robmob.robot import Robot
 from robmob.rover.commands import ResetCommand, MovementPWMCommand
 from robmob.rover.sensors import RobotEspSensor, SharpSensor, CameraRGBSensor, CameraDepthSensor
@@ -93,9 +90,9 @@ class TestRobot(unittest.TestCase):
         time.sleep(3)
 
         img = sensor.peek_data()
-        print(img)
+        print(img.shape)
         assert img is not None
-        assert img.size == (1920, 1080)
+        assert img.shape == (1080, 1920, 3)
 
     def test_camera_depth(self):
         robot = Robot('localhost', port=9090)
@@ -103,14 +100,9 @@ class TestRobot(unittest.TestCase):
 
         sensor = CameraDepthSensor()
         robot.add_sensor(sensor)
-        time.sleep(3)
-        while True:
-            ...
 
+        time.sleep(1)
         img = sensor.peek_data()
-        print(img)
+        print(img.shape)
         assert img is not None
-        assert img.size == (640, 480)
-        x = np.array(img)
-        plt.hist(x.flatten(), bins=256)
-        plt.show()
+        assert img.shape == (480, 640, 1)

@@ -59,6 +59,7 @@ class SharpSensor(Sensor):
 
 
 class CameraRGBSensor(Sensor):
+    # TODO bypass ROS and use the camera directly
     TOPIC = '/color/video/image/compressed'
     MESSAGE_TYPE = 'sensor_msgs/msg/CompressedImage'
     SAMPLE_RATE = 30
@@ -73,6 +74,7 @@ class CameraRGBSensor(Sensor):
 
 
 class CameraDepthSensor(Sensor):
+    # TODO bypass ROS and use the camera directly
     TOPIC = '/stereo/depth'
     MESSAGE_TYPE = ('sensor_msgs/msg/Image')
     # TOPIC = '/stereo/depth/compressedDepth'

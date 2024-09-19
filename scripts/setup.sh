@@ -27,4 +27,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 cd ~/ros2_ws
 git reset --hard
 git pull
+sudo apt update
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
 ./symlink_build.sh

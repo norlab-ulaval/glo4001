@@ -1,9 +1,11 @@
 import time
 import unittest
 
+import matplotlib.pyplot as plt
+
 from robmob.robot import Robot
 from robmob.rover.commands import ResetCommand, MovementPWMCommand
-from robmob.rover.sensors import RobotEspSensor, SharpSensor, CameraRGBSensor, CameraDepthSensor
+from robmob.rover.sensors import RobotEspSensor, SharpSensor, CameraRGBSensor, CameraDepthSensor, OakLiteCamera
 
 
 class TestRobot(unittest.TestCase):
@@ -106,3 +108,19 @@ class TestRobot(unittest.TestCase):
         print(img.shape)
         assert img is not None
         assert img.shape == (480, 640, 1)
+
+    def test_camera_rgb_oak(self):
+        camera = OakLiteCamera()
+        img = camera.get_rgb_image()
+        assert img.shape == (1080, 1920, 3)
+        plt.imshow(img)
+        plt.show()
+
+    def test_camera_depth_oak(self):
+        camera = OakLiteCamera()
+        img = camera.get_depth_image()
+        assert img.shape == (480, 640)
+        # normalize
+        img = (img - img.min()) / (img.max() - img.min())
+        plt.imshow(img)
+        plt.show()

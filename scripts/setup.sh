@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-sudo apt install -y python3.8-venv screen udev
+sudo apt install -y python3.8-venv screen udev ros-foxy-depthai-ros
 cd ~/glo4001
 git reset --hard
 git pull

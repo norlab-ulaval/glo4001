@@ -37,21 +37,30 @@ ordinateur de bord *Jetson Orin*, une paire de capteurs infra-rouge, une caméra
    ssh -L 8888:localhost:8888 norlab@192.168.0.101
    cd glo4001/scripts/
    git reset --hard
+   ./ros_rover.sh
    ./jupyter.sh
    ```
 4. Ouvrir l'URL affichée dans le terminal dans votre navigateur internet.
-5. Lancer une autre ligne de commande depuis votre ordinateur et entrer:
-   ```shell
-   ssh norlab@192.168.0.101
-   cd glo4001/scripts/
-   ./ros_rover.sh
-   ```
-6. Vous pouvez maintenant faire les laboratoires!
+5. Vous pouvez maintenant faire les laboratoires!
 
 À la fin des laboratoires, sauvegardez une copie de votre notebook (`File -> Download`) et éteignez le robot:
 
 ```shell
 sudo shutdown now
+```
+
+## Laboratoires sans la base robotique
+
+Pour faire les laboratoires, vous pouvez utilisez les données déjà collectées.
+Le dossier `offline` contient les données nécessaires pour faire les laboratoires sans la base robotique.
+
+Pour installer les dépendances nécessaires, exécutez les commandes suivantes:
+
+```shell
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+juptyer notebook
 ```
 
 ## Architecture logicielle

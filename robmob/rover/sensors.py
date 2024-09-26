@@ -12,7 +12,7 @@ from robmob.sensors import Sensor
 class RobotEspSensor(Sensor):
     TOPIC = '/rover/state'
     MESSAGE_TYPE = 'std_msgs/msg/String'
-    SAMPLE_RATE = 10
+    SAMPLE_RATE = 62.4
 
     def __init__(self, buffer_size=100000):
         super().__init__(buffer_size)
@@ -30,7 +30,8 @@ class RobotEspSensor(Sensor):
         return np.array([list(x.values()) for x in samples])
 
     def _data_to_gyro(self, data):
-        return dict(x=data['rgx'], y=data['rgy'], z=data['rgz'])
+        values = dict(x=data['rgx'], y=data['rgy'], z=data['rgz'])
+        return {k: np.rad2deg(v) for k, v in values.items()}
 
 
 class SharpSensor(Sensor):

@@ -21,6 +21,17 @@ class RobotEspSensor(Sensor):
         data = message['msg']['data']
         return ast.literal_eval(data)
 
+    def peek_gyro(self):
+        data = self.peek_data()
+        return self._data_to_gyro(data)
+
+    def sample_gyro_for_x_sec(self, duration):
+        samples = [self._data_to_gyro(x) for x in self.sample_data_for_x_sec(duration)]
+        return np.array([list(x.values()) for x in samples])
+
+    def _data_to_gyro(self, data):
+        return dict(x=data['rgx'], y=data['rgy'], z=data['rgz'])
+
 
 class SharpSensor(Sensor):
     TOPIC = '/range'

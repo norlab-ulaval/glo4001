@@ -38,6 +38,7 @@ ordinateur de bord *Jetson Orin*, une paire de capteurs infra-rouge, une caméra
    cd glo4001/scripts/
    git reset --hard
    ./ros_rover.sh
+   # CTRL-A + D pour détacher le terminal
    ./jupyter.sh
    ```
 4. Ouvrir l'URL affichée dans le terminal dans votre navigateur internet.

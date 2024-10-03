@@ -34,7 +34,7 @@ ordinateur de bord *Jetson Orin*, une paire de capteurs infra-rouge, une caméra
     - Le numéro du robot se trouve à l'avant de la plateforme
 3. Depuis votre ordinateur, lancer une ligne de commande et entrer:
    ```shell
-   ssh -L 8888:localhost:8888 -L 8000:localhost:8000 norlab@192.168.0.101
+   ssh -L 8888:localhost:8888 norlab@192.168.0.101
    cd glo4001/scripts/
    git reset --hard
    git pull

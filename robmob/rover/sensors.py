@@ -107,11 +107,16 @@ class CameraDepthSensor(Sensor):
 
 
 class OakLiteCamera:
-    RESOLUTION = (1920, 1080)
-    CENTER_X = RESOLUTION[0] // 2
-    CENTER_Y = RESOLUTION[1] // 2
+    RESOLUTION_RGB = (1920, 1080)
+    CENTER_X_RGB = RESOLUTION_RGB[0] / 2
+    CENTER_Y_RGB = RESOLUTION_RGB[1] / 2
+    RESOLUTION_DEPTH = (640, 480)
+    CENTER_X_DEPTH = RESOLUTION_DEPTH[0] / 2
+    CENTER_Y_DEPTH = RESOLUTION_DEPTH[1] / 2
     FOCAL_LENGTH = 3030.1787109375
-    FREQUENCY = 1
+    FOV_X = 69
+    FOV_Y = 54
+    FREQUENCY = 10
 
     def __init__(self, use_depth=False):
         self.pipeline = dai.Pipeline()
@@ -125,6 +130,8 @@ class OakLiteCamera:
 
         # Link
         xout_rgb = self.pipeline.create(dai.node.XLinkOut)
+        xout_rgb.setStreamName('rgb')
+        cam_rgb.video.link(xout_rgb.input)
 
         if use_depth:
             # Right
@@ -140,16 +147,15 @@ class OakLiteCamera:
             # Depth
             cam_stereo = self.pipeline.create(dai.node.StereoDepth)
             cam_stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
-            cam_stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
+            #cam_stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
             cam_stereo.setRectifyEdgeFillColor(0)
             cam_stereo.setLeftRightCheck(True)
             cam_stereo.setSubpixel(True)
+            cam_stereo.setDepthAlign(dai.CameraBoardSocket.RGB)
 
             # Links
             cam_right.out.link(cam_stereo.right)
             cam_left.out.link(cam_stereo.left)
-            xout_rgb.setStreamName('rgb')
-            cam_rgb.video.link(xout_rgb.input)
             xout_depth = self.pipeline.create(dai.node.XLinkOut)
             xout_depth.setStreamName('depth')
             cam_stereo.depth.link(xout_depth.input)

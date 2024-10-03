@@ -108,52 +108,71 @@ class CameraDepthSensor(Sensor):
 
 class OakLiteCamera:
     RESOLUTION = (1920, 1080)
+    CENTER_X = RESOLUTION[0] // 2
+    CENTER_Y = RESOLUTION[1] // 2
+    FOCAL_LENGTH = 3030.1787109375
+    FREQUENCY = 1
 
-    def __init__(self):
+    def __init__(self, use_depth=False):
         self.pipeline = dai.Pipeline()
 
         # RGB
         cam_rgb = self.pipeline.create(dai.node.ColorCamera)
-        cam_rgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_1080_P)
+        cam_rgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_720_P)
         cam_rgb.setInterleaved(False)
         cam_rgb.setColorOrder(dai.ColorCameraProperties.ColorOrder.BGR)
-        # Right
-        cam_right = self.pipeline.create(dai.node.MonoCamera)
-        cam_right.setCamera('right')
-        cam_right.setResolution(dai.MonoCameraProperties.SensorResolution.THE_480_P)
-        # Left
-        cam_left = self.pipeline.create(dai.node.MonoCamera)
-        cam_left.setCamera('left')
-        cam_left.setResolution(dai.MonoCameraProperties.SensorResolution.THE_480_P)
-        # Depth
-        cam_stereo = self.pipeline.create(dai.node.StereoDepth)
-        cam_stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
-        cam_stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
-        cam_stereo.setRectifyEdgeFillColor(0)
-        cam_stereo.setLeftRightCheck(True)
-        cam_stereo.setSubpixel(True)
+        cam_rgb.setFps(self.FREQUENCY)
 
-        # Links
+        # Link
         xout_rgb = self.pipeline.create(dai.node.XLinkOut)
-        cam_right.out.link(cam_stereo.right)
-        cam_left.out.link(cam_stereo.left)
-        xout_rgb.setStreamName('rgb')
-        cam_rgb.video.link(xout_rgb.input)
-        xout_depth = self.pipeline.create(dai.node.XLinkOut)
-        xout_depth.setStreamName('depth')
-        cam_stereo.depth.link(xout_depth.input)
+
+        if use_depth:
+            # Right
+            cam_right = self.pipeline.create(dai.node.MonoCamera)
+            cam_right.setCamera('right')
+            cam_right.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
+            cam_right.setFps(self.FREQUENCY)
+            # Left
+            cam_left = self.pipeline.create(dai.node.MonoCamera)
+            cam_left.setCamera('left')
+            cam_left.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
+            cam_left.setFps(self.FREQUENCY)
+            # Depth
+            cam_stereo = self.pipeline.create(dai.node.StereoDepth)
+            cam_stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
+            cam_stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
+            cam_stereo.setRectifyEdgeFillColor(0)
+            cam_stereo.setLeftRightCheck(True)
+            cam_stereo.setSubpixel(True)
+
+            # Links
+            cam_right.out.link(cam_stereo.right)
+            cam_left.out.link(cam_stereo.left)
+            xout_rgb.setStreamName('rgb')
+            cam_rgb.video.link(xout_rgb.input)
+            xout_depth = self.pipeline.create(dai.node.XLinkOut)
+            xout_depth.setStreamName('depth')
+            cam_stereo.depth.link(xout_depth.input)
 
         self.device = dai.Device(self.pipeline)
         self.queue_rgb = self.device.getOutputQueue(name='rgb', maxSize=4, blocking=False)
-        self.queue_depth = self.device.getOutputQueue(name='depth', maxSize=4, blocking=False)
+        if use_depth:
+            self.queue_depth = self.device.getOutputQueue(name='depth', maxSize=4, blocking=False)
+
+        # Intrinsics
 
     def __del__(self):
         self.device.close()
 
-    def get_rgb_image(self):
+    def peek_rgb(self):
         in_rgb = self.queue_rgb.get()
         return in_rgb.getCvFrame()[:, :, ::-1]
 
-    def get_depth_image(self):
+    def peek_depth(self):
         in_depth = self.queue_depth.get()
         return in_depth.getFrame()
+
+    def get_focal_length(self):
+        calibration = self.device.readCalibration()
+        intrinsics = calibration.getCameraIntrinsics(dai.CameraBoardSocket.RGB)
+        return intrinsics[0][0]

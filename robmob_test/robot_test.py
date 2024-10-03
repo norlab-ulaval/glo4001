@@ -111,14 +111,14 @@ class TestRobot(unittest.TestCase):
 
     def test_camera_rgb_oak(self):
         camera = OakLiteCamera()
-        img = camera.get_rgb_image()
+        img = camera.peek_rgb()
         assert img.shape == (1080, 1920, 3)
         plt.imshow(img)
         plt.show()
 
     def test_camera_depth_oak(self):
         camera = OakLiteCamera()
-        img = camera.get_depth_image()
+        img = camera.peek_depth()
         assert img.shape == (480, 640)
         # normalize
         img = (img - img.min()) / (img.max() - img.min())

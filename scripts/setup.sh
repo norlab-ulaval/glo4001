@@ -6,6 +6,7 @@ git pull
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+sudo wget -qO- https://docs.luxonis.com/install_dependencies.sh | bash
 
 #sudo cp ~/glo4001/scripts/jupyter.service /etc/systemd/system/jupyter.service
 #sudo cp ~/glo4001/scripts/ros_rover.service /etc/systemd/system/ros_rover.service

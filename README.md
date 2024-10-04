@@ -38,6 +38,7 @@ ordinateur de bord *Jetson Orin*, une paire de capteurs infra-rouge, une caméra
    cd glo4001/scripts/
    git reset --hard
    git pull
+   ./setup.sh
    ./ros_rover.sh
    # CTRL-A + D pour détacher le terminal
    ./jupyter.sh

@@ -9,5 +9,6 @@ pyserial
 opencv-python
 ipython
 ipympl
+prosac
 depthai
 --extra-index-url https://artifacts.luxonis.com/artifactory/luxonis-python-snapshot-local/

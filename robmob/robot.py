@@ -7,8 +7,7 @@ import urllib.parse
 import websocket
 
 from robmob.commands import CommandPublisher
-from robmob.kobuki.commands import LinearMovementCommand, ResetCommand, RotationCommand, MovementCommand
-from robmob.kobuki.sensors import FullOdomSensor
+from robmob.rover.commands import ResetCommand, MovementCommand
 from robmob.simulation import IN_SIMULATION
 
 
@@ -67,7 +66,7 @@ class Robot:
         self.send_command(ResetCommand())
 
     def linear_movement(self, speed, duration):
-        command = LinearMovementCommand(speed)
+        command = MovementCommand(speed, 0)
 
         self.send_command(command)
         time.sleep(duration)
@@ -76,24 +75,24 @@ class Robot:
     def _moved_distance(self, initial_x, initial_y, x, y):
         return ((x - initial_x) ** 2 + (y - initial_y) ** 2) ** 0.5
 
-    def linear_movement_precise(self, distance, speed):
-        if not self.odom:
-            self.odom = FullOdomSensor()
-            self.add_sensor(self.odom)
-            time.sleep(0.4)
-
-        breaking_distance = speed / 0.05 * 0.0025  # Very approximative
-        initial_x, initial_y, _ = self.odom.peek_data()
-        x, y = initial_x, initial_y
-        command = LinearMovementCommand(speed)
-        self.send_command(command)
-        while self._moved_distance(initial_x, initial_y, x, y) < distance - breaking_distance:
-            time.sleep(0.5 / self.odom.SAMPLE_RATE)
-            x, y, _ = self.odom.peek_data()
-        self.send_command(ResetCommand())
+    # def linear_movement_precise(self, distance, speed):
+    #     if not self.odom:
+    #         self.odom = FullOdomSensor()
+    #         self.add_sensor(self.odom)
+    #         time.sleep(0.4)
+    #
+    #     breaking_distance = speed / 0.05 * 0.0025  # Very approximative
+    #     initial_x, initial_y, _ = self.odom.peek_data()
+    #     x, y = initial_x, initial_y
+    #     command = LinearMovementCommand(speed)
+    #     self.send_command(command)
+    #     while self._moved_distance(initial_x, initial_y, x, y) < distance - breaking_distance:
+    #         time.sleep(0.5 / self.odom.SAMPLE_RATE)
+    #         x, y, _ = self.odom.peek_data()
+    #     self.send_command(ResetCommand())
 
     def angular_movement(self, speed, duration):
-        command = RotationCommand(speed)
+        command = MovementCommand(0, speed)
 
         self.send_command(command)
         time.sleep(duration)

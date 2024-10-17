@@ -31,7 +31,11 @@ class RobotEspSensor(Sensor):
         return np.array([self._data_to_odom(x) for x in data])
 
     def _data_to_odom(self, data):
-        return data['timestamp'], data['en_odom_l'], data['en_odom_r']
+        timestamp = data['timestamp']
+        sec = timestamp.sec
+        nano = timestamp.nanosec
+        t = sec + nano * 1e-9
+        return t, data['en_odom_l'], data['en_odom_r']
 
     def peek_gyro(self):
         data = self.peek_data()

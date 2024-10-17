@@ -13,6 +13,8 @@ class RobotEspSensor(Sensor):
     TOPIC = '/rover/state'
     MESSAGE_TYPE = 'std_msgs/msg/String'
     SAMPLE_RATE = 62.4
+    TICKS_TO_METER = ...
+    DISTANCE_CENTER_TO_WHEEL = 12.5 / 200
 
     def __init__(self, buffer_size=100000):
         super().__init__(buffer_size)
@@ -21,6 +23,16 @@ class RobotEspSensor(Sensor):
         data = message['msg']['data']
         return ast.literal_eval(data)
 
+    def peek_odom(self):
+        data = self.peek_data()
+        return self._data_to_odom(data)
+
+    def _data_to_odom(self, data):
+        return {
+            'en_odom_l': data['en_odom_l'],
+            'en_odom_r': data['en_odom_r'],
+        }
+
     def peek_gyro(self):
         data = self.peek_data()
         return self._data_to_gyro(data)
@@ -28,6 +40,10 @@ class RobotEspSensor(Sensor):
     def sample_gyro_for_x_sec(self, duration):
         samples = [self._data_to_gyro(x) for x in self.sample_data_for_x_sec(duration)]
         return np.array([list(x.values()) for x in samples])
+
+    def read_gyro(self):
+        data = self.read_buffer()
+        return [self._data_to_gyro(x) for x in data]
 
     def _data_to_gyro(self, data):
         values = dict(x=data['rgx'], y=data['rgy'], z=data['rgz'])
@@ -147,7 +163,7 @@ class OakLiteCamera:
             # Depth
             cam_stereo = self.pipeline.create(dai.node.StereoDepth)
             cam_stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
-            #cam_stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
+            # cam_stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
             cam_stereo.setRectifyEdgeFillColor(0)
             cam_stereo.setLeftRightCheck(True)
             cam_stereo.setSubpixel(True)

@@ -1,18 +1,20 @@
 import _thread
 import json
-import math
 import time
 import urllib.parse
 
+import numpy as np
 import websocket
 
 from robmob.commands import CommandPublisher
-from robmob.rover.commands import ResetCommand, MovementCommand
-from robmob.simulation import IN_SIMULATION
+from robmob.rover.commands import ResetCommand, MovementFloatCommand
 
 
 class Robot:
-    DISTANCE_CENTER_TO_WHEEL = 0.503124740324218 / (2 * math.pi) if IN_SIMULATION else 0.11
+    DISTANCE_CENTER_TO_WHEEL = 12.5 / 200
+    BASELINE = 2 * DISTANCE_CENTER_TO_WHEEL
+    WHEEL_DIAMETER = 80 / 1000
+    WHEEL_RADIUS = WHEEL_DIAMETER / 2
 
     def __init__(self, robot_ip, port=9090):
         self.ws = None
@@ -22,6 +24,7 @@ class Robot:
         self.robot_url = 'ws://' + robot_ip + ':' + str(port)
         self.connection_established = False
         self.connecting = False
+        self.inverse_skid = self._inverse_skid_steer_matrix()
 
         try:
             urllib.parse.urlparse(self.robot_url)
@@ -30,6 +33,23 @@ class Robot:
 
     def __del__(self):
         self.disconnect()
+
+    def _inverse_skid_steer_matrix(self):
+        skid_matrix = self.WHEEL_RADIUS * np.array([[0.5, 0.5],
+                                                    [-1 / self.BASELINE, 1 / self.BASELINE]])
+        inverse_skid_matrix = np.linalg.inv(skid_matrix)
+        return inverse_skid_matrix
+
+    def _compute_wheel_speeds(self, linear, angular):
+        return self.inverse_skid @ np.array([linear, angular])
+
+    def _map_to_motor_speeds(self, speeds):
+        speeds = speeds * self.WHEEL_RADIUS
+        return np.clip(speeds, -1, 1)
+
+    def _command_to_motor_speeds(self, linear, angular):
+        speeds = self._compute_wheel_speeds(linear, angular)
+        return self._map_to_motor_speeds(speeds)
 
     def connect(self):
         self.ws = websocket.WebSocketApp(self.robot_url,
@@ -64,16 +84,13 @@ class Robot:
         self.ws.keep_running = False
 
     def general_movement(self, linear, angular, duration):
-        self.send_command(MovementCommand(linear, angular))
+        speed_l, speed_r = self._command_to_motor_speeds(linear, angular)
+        self.send_command(MovementFloatCommand(speed_l, speed_r))
         time.sleep(duration)
         self.send_command(ResetCommand())
 
     def linear_movement(self, speed, duration):
-        command = MovementCommand(speed, 0)
-
-        self.send_command(command)
-        time.sleep(duration)
-        self.send_command(ResetCommand())
+        self.general_movement(speed, 0, duration)
 
     def _moved_distance(self, initial_x, initial_y, x, y):
         return ((x - initial_x) ** 2 + (y - initial_y) ** 2) ** 0.5
@@ -94,12 +111,8 @@ class Robot:
     #         x, y, _ = self.odom.peek_data()
     #     self.send_command(ResetCommand())
 
-    def angular_movement(self, speed, duration):
-        command = MovementCommand(0, speed)
-
-        self.send_command(command)
-        time.sleep(duration)
-        self.send_command(ResetCommand())
+    def angular_movement(self, angular_speed, duration):
+        self.general_movement(0, angular_speed, duration)
 
     def _on_message(self, _, raw_message):
         parsed_message = json.loads(raw_message)

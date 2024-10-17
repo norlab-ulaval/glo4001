@@ -14,7 +14,6 @@ class RobotEspSensor(Sensor):
     MESSAGE_TYPE = 'std_msgs/msg/String'
     SAMPLE_RATE = 62.4
     TICKS_TO_METER = ...
-    DISTANCE_CENTER_TO_WHEEL = 12.5 / 200
 
     def __init__(self, buffer_size=100_000):
         super().__init__(buffer_size)

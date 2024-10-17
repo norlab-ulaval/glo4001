@@ -31,7 +31,7 @@ class RobotEspSensor(Sensor):
         return self._data_to_odom(data)
 
     def read_odom(self):
-        data = self.read_data()
+        data = self.read_buffer()
         return np.array([self._data_to_odom(x) for x in data])
 
     def _data_to_odom(self, data):

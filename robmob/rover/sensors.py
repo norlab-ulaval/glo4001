@@ -1,5 +1,6 @@
 import ast
 import base64
+import re
 from io import BytesIO
 
 import depthai as dai
@@ -14,6 +15,8 @@ class RobotEspSensor(Sensor):
     MESSAGE_TYPE = 'std_msgs/msg/String'
     SAMPLE_RATE = 62.4
     TICKS_TO_METER = ...
+    SEC_REGEX = r'\bsec=([0-9]*)'
+    NANOSEC_REGEX = r'\bnanosec=([0-9]*)'
 
     def __init__(self, buffer_size=100_000):
         super().__init__(buffer_size)
@@ -32,8 +35,8 @@ class RobotEspSensor(Sensor):
 
     def _data_to_odom(self, data):
         timestamp = data['timestamp']
-        sec = timestamp.sec
-        nano = timestamp.nanosec
+        sec = int(re.search(self.SEC_REGEX, timestamp).group(1))
+        nano = int(re.search(self.NANOSEC_REGEX, timestamp).group(1))
         t = sec + nano * 1e-9
         return t, data['en_odom_l'], data['en_odom_r']
 

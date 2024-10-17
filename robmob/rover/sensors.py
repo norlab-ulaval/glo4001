@@ -15,7 +15,7 @@ class RobotEspSensor(Sensor):
     TOPIC = '/rover/state'
     MESSAGE_TYPE = 'std_msgs/msg/String'
     SAMPLE_RATE = 62.4
-    TICKS_TO_METER = 2 * np.pi / 2048 / Robot.WHEEL_RADIUS
+    TICKS_TO_METER = 2 * np.pi / 2048 * Robot.WHEEL_RADIUS
     SEC_REGEX = r'\bsec=([0-9]*)'
     NANOSEC_REGEX = r'\bnanosec=([0-9]*)'
 

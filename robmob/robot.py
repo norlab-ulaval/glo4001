@@ -11,8 +11,9 @@ from robmob.rover.commands import ResetCommand, MovementFloatCommand
 
 
 class Robot:
-    DISTANCE_CENTER_TO_WHEEL = 12.5 / 200
+    DISTANCE_CENTER_TO_WHEEL = 17.5 / 200
     BASELINE = 2 * DISTANCE_CENTER_TO_WHEEL
+    ALPHA = 1.25
     WHEEL_DIAMETER = 80 / 1000
     WHEEL_RADIUS = WHEEL_DIAMETER / 2
 
@@ -36,7 +37,8 @@ class Robot:
 
     def _inverse_skid_steer_matrix(self):
         skid_matrix = self.WHEEL_RADIUS * np.array([[0.5, 0.5],
-                                                    [-1 / self.BASELINE, 1 / self.BASELINE]])
+                                                    [-1 / (self.BASELINE * self.ALPHA),
+                                                     1 / (self.BASELINE * self.ALPHA)]])
         inverse_skid_matrix = np.linalg.inv(skid_matrix)
         return inverse_skid_matrix
 
@@ -44,7 +46,7 @@ class Robot:
         return self.inverse_skid @ np.array([linear, angular])
 
     def _map_to_motor_speeds(self, speeds):
-        speeds = speeds * self.WHEEL_RADIUS
+        speeds = speeds * self.WHEEL_RADIUS * self.ALPHA
         return np.clip(speeds, -1, 1)
 
     def _command_to_motor_speeds(self, linear, angular):

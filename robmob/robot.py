@@ -28,6 +28,9 @@ class Robot:
         except ValueError:
             raise ValueError(f"Robot address {robot_ip}:{port} is not valid")
 
+    def __del__(self):
+        self.disconnect()
+
     def connect(self):
         self.ws = websocket.WebSocketApp(self.robot_url,
                                          on_message=self._on_message,

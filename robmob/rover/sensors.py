@@ -16,7 +16,7 @@ class RobotEspSensor(Sensor):
     TICKS_TO_METER = ...
     DISTANCE_CENTER_TO_WHEEL = 12.5 / 200
 
-    def __init__(self, buffer_size=100000):
+    def __init__(self, buffer_size=100_000):
         super().__init__(buffer_size)
 
     def parse_message(self, message):
@@ -27,11 +27,12 @@ class RobotEspSensor(Sensor):
         data = self.peek_data()
         return self._data_to_odom(data)
 
+    def read_odom(self):
+        data = self.read_data()
+        return np.array([self._data_to_odom(x) for x in data])
+
     def _data_to_odom(self, data):
-        return {
-            'en_odom_l': data['en_odom_l'],
-            'en_odom_r': data['en_odom_r'],
-        }
+        return data['en_odom_l'], data['en_odom_r']
 
     def peek_gyro(self):
         data = self.peek_data()

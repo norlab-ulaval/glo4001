@@ -2,9 +2,6 @@ from overrides import overrides
 
 from robmob.commands import Command
 
-DEFAULT_LINEAR_SPEED = 0.5
-DEFAULT_ANGULAR_SPEED = 1.0
-
 
 class RoverCommand(Command):
     COMMAND_TOPIC = '/rover/command'
@@ -44,23 +41,3 @@ class MovementPWMCommand(RoverCommand):
     def __init__(self, left: int, right: int):
         super().__init__()
         self._set_message({"T": 11, "L": left, "R": right})
-
-
-class MoveForwardCommand(MovementFloatCommand):
-    def __init__(self, speed=DEFAULT_LINEAR_SPEED):
-        super().__init__(speed, 0.0)
-
-
-class MoveBackwardCommand(MovementFloatCommand):
-    def __init__(self, speed=DEFAULT_LINEAR_SPEED):
-        super().__init__(-speed, 0.0)
-
-
-class TurnLeftCommand(MovementFloatCommand):
-    def __init__(self, speed=DEFAULT_ANGULAR_SPEED):
-        super().__init__(0.0, speed)
-
-
-class TurnRightCommand(MovementFloatCommand):
-    def __init__(self, speed=DEFAULT_ANGULAR_SPEED):
-        super().__init__(0.0, -speed)

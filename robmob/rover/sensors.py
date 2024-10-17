@@ -7,6 +7,7 @@ import depthai as dai
 import numpy as np
 from PIL import Image
 
+from robmob.robot import Robot
 from robmob.sensors import Sensor
 
 
@@ -14,7 +15,7 @@ class RobotEspSensor(Sensor):
     TOPIC = '/rover/state'
     MESSAGE_TYPE = 'std_msgs/msg/String'
     SAMPLE_RATE = 62.4
-    TICKS_TO_METER = ...
+    TICKS_TO_METER = 2 * np.pi / 2048 / Robot.WHEEL_RADIUS
     SEC_REGEX = r'\bsec=([0-9]*)'
     NANOSEC_REGEX = r'\bnanosec=([0-9]*)'
 
@@ -34,7 +35,6 @@ class RobotEspSensor(Sensor):
         return np.array([self._data_to_odom(x) for x in data])
 
     def _data_to_odom(self, data):
-        from robmob.robot import Robot
         timestamp = data['timestamp']
         sec = int(re.search(self.SEC_REGEX, timestamp).group(1))
         nano = int(re.search(self.NANOSEC_REGEX, timestamp).group(1))

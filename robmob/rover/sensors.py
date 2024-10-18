@@ -143,20 +143,30 @@ class OakLiteCamera:
     FOV_Y = 54
     FREQUENCY = 10
 
-    def __init__(self, use_depth=False):
+    def __init__(self, use_rgb=False, use_depth=False, use_april=False):
         self.pipeline = dai.Pipeline()
 
-        # RGB
-        cam_rgb = self.pipeline.create(dai.node.ColorCamera)
-        cam_rgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_720_P)
-        cam_rgb.setInterleaved(False)
-        cam_rgb.setColorOrder(dai.ColorCameraProperties.ColorOrder.BGR)
-        cam_rgb.setFps(self.FREQUENCY)
+        if use_rgb:
+            # RGB
+            cam_rgb = self.pipeline.create(dai.node.ColorCamera)
+            cam_rgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_720_P)
+            cam_rgb.setInterleaved(False)
+            cam_rgb.setColorOrder(dai.ColorCameraProperties.ColorOrder.BGR)
+            cam_rgb.setFps(self.FREQUENCY)
 
-        # Link
-        xout_rgb = self.pipeline.create(dai.node.XLinkOut)
-        xout_rgb.setStreamName('rgb')
-        cam_rgb.video.link(xout_rgb.input)
+            # Link
+            xout_rgb = self.pipeline.create(dai.node.XLinkOut)
+            xout_rgb.setStreamName('rgb')
+            cam_rgb.video.link(xout_rgb.input)
+
+        # Left
+        cam_left = self.pipeline.create(dai.node.MonoCamera)
+        cam_left.setCamera('left')
+        cam_left.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
+        cam_left.setFps(self.FREQUENCY)
+        xout_left = self.pipeline.create(dai.node.XLinkOut)
+        xout_left.setStreamName('left')
+        cam_left.out.link(xout_left.input)
 
         if use_depth:
             # Right
@@ -164,11 +174,6 @@ class OakLiteCamera:
             cam_right.setCamera('right')
             cam_right.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
             cam_right.setFps(self.FREQUENCY)
-            # Left
-            cam_left = self.pipeline.create(dai.node.MonoCamera)
-            cam_left.setCamera('left')
-            cam_left.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
-            cam_left.setFps(self.FREQUENCY)
             # Depth
             cam_stereo = self.pipeline.create(dai.node.StereoDepth)
             cam_stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
@@ -185,8 +190,13 @@ class OakLiteCamera:
             xout_depth.setStreamName('depth')
             cam_stereo.depth.link(xout_depth.input)
 
+        if use_april:
+           ...
+
         self.device = dai.Device(self.pipeline)
-        self.queue_rgb = self.device.getOutputQueue(name='rgb', maxSize=4, blocking=False)
+        self.queue_left = self.device.getOutputQueue(name='left', maxSize=4, blocking=False)
+        if use_rgb:
+            self.queue_rgb = self.device.getOutputQueue(name='rgb', maxSize=4, blocking=False)
         if use_depth:
             self.queue_depth = self.device.getOutputQueue(name='depth', maxSize=4, blocking=False)
 
@@ -194,6 +204,10 @@ class OakLiteCamera:
 
     def __del__(self):
         self.device.close()
+
+    def peek_left(self)
+        in_left = self.queue_left.get()
+        return in_left.getCvFrame()[:, :, ::-1]
 
     def peek_rgb(self):
         in_rgb = self.queue_rgb.get()

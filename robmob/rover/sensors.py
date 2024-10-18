@@ -191,7 +191,32 @@ class OakLiteCamera:
             cam_stereo.depth.link(xout_depth.input)
 
         if use_april:
-           ...
+            apriltag = self.pipeline.create(dai.node.AprilTag)
+            apriltag.initialConfig.setFamily(dai.AprilTagConfig.Family.TAG_36H11)
+
+            april_config = apriltag.initialConfig.get()
+            april_config.quadDecimate = 4
+            april_config.quadSigma = 0
+            april_config.refineEdges = True
+            april_config.decodeSharpening = 0.25
+            april_config.maxHammingDistance = 1
+            april_config.quadThresholds.minClusterPixels = 5
+            april_config.quadThresholds.maxNmaxima = 10
+            april_config.quadThresholds.criticalDegree = 10
+            april_config.quadThresholds.maxLineFitMse = 10
+            april_config.quadThresholds.minWhiteBlackDiff = 5
+            april_config.quadThresholds.deglitch = False
+            april_config.initialConfig.set(april_config)
+
+            xout_apriltag = self.pipeline.create(dai.node.XLinkOut)
+            apriltag.passthroughInputImage.link(xout_left.input)
+            cam_left.out.link(apriltag.inputImage)
+            apriltag.out.link(xout_apriltag.input)
+            apriltag.inputImage.setBlocking(False)
+            apriltag.inputImage.setQueueSize(1)
+
+            xout_apriltag.setStreamName('apriltagdata')
+
 
         self.device = dai.Device(self.pipeline)
         self.queue_left = self.device.getOutputQueue(name='left', maxSize=4, blocking=False)
@@ -199,6 +224,8 @@ class OakLiteCamera:
             self.queue_rgb = self.device.getOutputQueue(name='rgb', maxSize=4, blocking=False)
         if use_depth:
             self.queue_depth = self.device.getOutputQueue(name='depth', maxSize=4, blocking=False)
+        if use_april:
+            self.queue_apriltag = self.device.getOutputQueue(name='apriltagdata', maxSize=8, blocking=False)
 
         # Intrinsics
 
@@ -208,6 +235,10 @@ class OakLiteCamera:
     def peek_left(self):
         in_left = self.queue_left.get()
         return in_left.getCvFrame()
+
+    def peek_apriltag(self):
+        in_apriltag = self.queue_apriltag.get()
+        return in_apriltag
 
     def peek_rgb(self):
         in_rgb = self.queue_rgb.get()

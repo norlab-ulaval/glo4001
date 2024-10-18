@@ -207,7 +207,7 @@ class OakLiteCamera:
 
     def peek_left(self):
         in_left = self.queue_left.get()
-        return in_left.getCvFrame()[:, :, ::-1]
+        return in_left.getCvFrame()
 
     def peek_rgb(self):
         in_rgb = self.queue_rgb.get()

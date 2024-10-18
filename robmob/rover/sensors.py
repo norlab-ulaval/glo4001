@@ -207,3 +207,21 @@ class OakLiteCamera:
         calibration = self.device.readCalibration()
         intrinsics = calibration.getCameraIntrinsics(dai.CameraBoardSocket.RGB)
         return intrinsics[0][0]
+
+
+class LDLidarSensor(Sensor):
+    TOPIC = '/scan'
+    MESSAGE_TYPE = 'sensor_msgs/LaserScan'
+    SAMPLE_RATE = 5
+
+    def __init__(self, buffer_size=500):
+        super().__init__(buffer_size)
+
+    def parse_message(self, message):
+        return {'angle_min': message['msg']['angle_min'],
+                'angle_max': message['msg']['angle_max'],
+                'angle_increment': message['msg']['angle_increment'],
+                'range_min': message['msg']['range_min'],
+                'range_max': message['msg']['range_max'],
+                'ranges': np.nan_to_num(np.array(message['msg']['ranges']).astype(np.float32))
+                }

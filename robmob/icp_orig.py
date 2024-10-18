@@ -53,7 +53,7 @@ def nearest_neighbor(src, dst):
         indecies: dst indecies of the nearest neighbor
     """
 
-    indecies = np.zeros(src.shape[0], dtype=np.int)
+    indecies = np.zeros(src.shape[0], dtype=int)
     distances = np.zeros(src.shape[0])
     for i, s in enumerate(src):
         min_dist = np.inf

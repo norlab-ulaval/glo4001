@@ -205,7 +205,7 @@ class OakLiteCamera:
     def __del__(self):
         self.device.close()
 
-    def peek_left(self)
+    def peek_left(self):
         in_left = self.queue_left.get()
         return in_left.getCvFrame()[:, :, ::-1]
 

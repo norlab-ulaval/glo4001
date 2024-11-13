@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 from robmob.robot import Robot
 from robmob.rover.commands import ResetCommand, MovementPWMCommand
-from robmob.rover.sensors import RobotEspSensor, SharpSensor, CameraRGBSensor, CameraDepthSensor, OakLiteCamera
+from robmob.rover.sensors import RobotEspSensor, SharpSensor, CameraRGBSensor, CameraDepthSensor, OakLiteCamera, \
+    LDLidarSensor
 
 
 class TestRobot(unittest.TestCase):
@@ -83,44 +84,42 @@ class TestRobot(unittest.TestCase):
         plt.plot(gz)
         plt.show()
 
-    def test_camera_rgb(self):
-        robot = Robot('localhost', port=9090)
-        robot.connect()
-
-        sensor = CameraRGBSensor()
-        robot.add_sensor(sensor)
-        time.sleep(3)
-
-        img = sensor.peek_data()
-        print(img.shape)
-        assert img is not None
-        assert img.shape == (1080, 1920, 3)
-
-    def test_camera_depth(self):
-        robot = Robot('localhost', port=9090)
-        robot.connect()
-
-        sensor = CameraDepthSensor()
-        robot.add_sensor(sensor)
-
-        time.sleep(1)
-        img = sensor.peek_data()
-        print(img.shape)
-        assert img is not None
-        assert img.shape == (480, 640, 1)
-
     def test_camera_rgb_oak(self):
-        camera = OakLiteCamera()
+        camera = OakLiteCamera(use_rgb=True)
         img = camera.peek_rgb()
         assert img.shape == (1080, 1920, 3)
         plt.imshow(img)
         plt.show()
 
-    def test_camera_depth_oak(self):
+    def test_camera_left_oak(self):
         camera = OakLiteCamera()
+        img = camera.peek_left()
+        assert img.shape == (480, 640)
+        plt.imshow(img, cmap='gray')
+        plt.show()
+
+    def test_camera_depth_oak(self):
+        camera = OakLiteCamera(use_depth=True)
         img = camera.peek_depth()
         assert img.shape == (480, 640)
         # normalize
         img = (img - img.min()) / (img.max() - img.min())
         plt.imshow(img)
         plt.show()
+
+    def test_camera_apriltag(self):
+        camera = OakLiteCamera(use_april=True)
+        tag = camera.peek_apriltag()
+        print(tag)
+
+    def test_lidar(self):
+        robot = Robot('localhost', port=9090)
+        robot.connect()
+
+        sensor = LDLidarSensor()
+        robot.add_sensor(sensor)
+
+        time.sleep(2)
+        msg = sensor.peek_data()
+        print(msg)
+

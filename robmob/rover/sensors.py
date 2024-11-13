@@ -192,7 +192,7 @@ class OakLiteCamera:
 
         if use_april:
             apriltag = self.pipeline.create(dai.node.AprilTag)
-            apriltag.initialConfig.setFamily(dai.AprilTagConfig.Family.TAG_36H11)
+            apriltag.initialConfig.setFamily(dai.AprilTagConfig.Family.TAG_16H5)
 
             april_config = apriltag.initialConfig.get()
             april_config.quadDecimate = 4
@@ -206,7 +206,6 @@ class OakLiteCamera:
             april_config.quadThresholds.maxLineFitMse = 10
             april_config.quadThresholds.minWhiteBlackDiff = 5
             april_config.quadThresholds.deglitch = False
-            april_config.initialConfig.set(april_config)
 
             xout_apriltag = self.pipeline.create(dai.node.XLinkOut)
             apriltag.passthroughInputImage.link(xout_left.input)
@@ -237,7 +236,7 @@ class OakLiteCamera:
         return in_left.getCvFrame()
 
     def peek_apriltag(self):
-        in_apriltag = self.queue_apriltag.get()
+        in_apriltag = self.queue_apriltag.get().aprilTags
         return in_apriltag
 
     def peek_rgb(self):

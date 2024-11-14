@@ -94,8 +94,22 @@ class Robot:
     def linear_movement(self, speed, duration):
         self.general_movement(speed, 0, duration)
 
+    def precise_movement(self, speed, distance):
+        from rover.sensors import RobotEspSensor
+        if RobotEspSensor.TOPIC not in self.sensors:
+            self.odom = RobotEspSensor()
+            self.add_sensor(self.odom)
+        initial_left, init_right = self.odom.peek_odom()
+        left, right = initial_left, init_right
+        while self._moved_distance(initial_left, init_right, left, right) < distance:
+            self.general_movement(speed, 0, 0.1)
+            left, right = self.odom.peek_odom()
+        self.send_command(ResetCommand())
+
     def _moved_distance(self, initial_x, initial_y, x, y):
-        return ((x - initial_x) ** 2 + (y - initial_y) ** 2) ** 0.5
+        dx, dy = x - initial_x, y - initial_y
+        d = (dx - dy) / 2
+        return self.odom.TICKS_TO_METER * d
 
     # def linear_movement_precise(self, distance, speed):
     #     if not self.odom:

@@ -227,6 +227,7 @@ class OakLiteCamera:
             self.queue_apriltag = self.device.getOutputQueue(name='apriltagdata', maxSize=8, blocking=False)
 
         # Intrinsics
+        self.calibration = self.device.readCalibration()
 
     def __del__(self):
         self.device.close()

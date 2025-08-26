@@ -60,40 +60,29 @@ class RobotEspSensor(Sensor):
 
 
 class SharpSensor(Sensor):
-    TOPIC = '/range'
-    MESSAGE_TYPE = 'std_msgs/msg/Float32'
-    SAMPLE_RATE = 100
+    TOPIC = '/scan'
+    MESSAGE_TYPE = 'sensor_msgs/LaserScan'
+    SAMPLE_RATE = 5
+    ANGLE_FORWARD = np.deg2rad(225)
 
-    # Calibration table of the high range sharp sensor, for 15+ cm.
-    HIGH_RANGE_CALIB_TABLE = np.asarray([
-        [15, 2.76],
-        [20, 2.53],
-        [30, 1.99],
-        [40, 1.53],
-        [50, 1.23],
-        [60, 1.04],
-        [70, 0.91],
-        [80, 0.82],
-        [90, 0.72],
-        [100, 0.66],
-        [110, 0.6],
-        [120, 0.55],
-        [130, 0.50],
-        [140, 0.46],
-        [150, 0.435],
-        [200, 0],
-        [np.inf, 0]
-    ])
-
-    def __init__(self, buffer_size=100):
-        """
-        There are two Sharp sensors on the robot. The analog_input_id 0 is the long range sensor
-        and the analog_input_id 1 is the short range sensor.
-        """
+    def __init__(self, buffer_size=500):
         super().__init__(buffer_size)
 
     def parse_message(self, message):
-        return float(message['msg']['data'])
+        msg_dict = {'angle_min': message['msg']['angle_min'],
+                    'angle_max': message['msg']['angle_max'],
+                    'angle_increment': message['msg']['angle_increment'],
+                    'range_min': message['msg']['range_min'],
+                    'range_max': message['msg']['range_max'],
+                    'ranges': np.nan_to_num(np.array(message['msg']['ranges']).astype(np.float32))
+                    }
+        
+        if msg_dict['angle_min'] <= self.ANGLE_FORWARD <= msg_dict['angle_max']:
+            index = int((self.ANGLE_FORWARD - msg_dict['angle_min']) / msg_dict['angle_increment'])
+            forward_distance = msg_dict['ranges'][index]
+        else:
+            forward_distance = 0
+        return float(forward_distance)
 
 
 class CameraRGBSensor(Sensor):

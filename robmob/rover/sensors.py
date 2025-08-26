@@ -60,29 +60,84 @@ class RobotEspSensor(Sensor):
 
 
 class SharpSensor(Sensor):
+    TOPIC = '/range'
+    MESSAGE_TYPE = 'std_msgs/msg/Float32'
+    SAMPLE_RATE = 100
+
+    # Calibration table of the high range sharp sensor, for 15+ cm.
+    HIGH_RANGE_CALIB_TABLE = np.asarray([
+        [15, 2.76],
+        [20, 2.53],
+        [30, 1.99],
+        [40, 1.53],
+        [50, 1.23],
+        [60, 1.04],
+        [70, 0.91],
+        [80, 0.82],
+        [90, 0.72],
+        [100, 0.66],
+        [110, 0.6],
+        [120, 0.55],
+        [130, 0.50],
+        [140, 0.46],
+        [150, 0.435],
+        [200, 0],
+        [np.inf, 0]
+    ])
+
+    def __init__(self, buffer_size=100):
+        """
+        There are two Sharp sensors on the robot. The analog_input_id 0 is the long range sensor
+        and the analog_input_id 1 is the short range sensor.
+        """
+        super().__init__(buffer_size)
+
+    def parse_message(self, message):
+        return float(message['msg']['data'])
+
+
+class SharpSensorVirtual(Sensor):
     TOPIC = '/scan'
     MESSAGE_TYPE = 'sensor_msgs/LaserScan'
     SAMPLE_RATE = 5
-    ANGLE_FORWARD = np.deg2rad(225)
+    CONE_ANGLE_DEG = 10
+    SAMPLES_X = [0.00, 0.80, 1.12, 1.20, 1.28, 1.60, 3.20, 4.00, 4.80, 7.20, 10.4, 16.8]
+    SAMPLES_Y = [0.00, 2.30, 2.70, 2.75, 2.70, 2.50, 1.50, 1.25, 1.00, 0.75, 0.50, 0.00]
 
     def __init__(self, buffer_size=500):
         super().__init__(buffer_size)
 
+    def distance_to_voltage(self, distance):
+        if distance < 0 or distance > 15:
+            print("Warning: Distance out of range (0 to 15 meters)")
+            return 0.0
+        return np.interp(distance, self.SAMPLES_X, self.SAMPLES_Y)
+
     def parse_message(self, message):
-        msg_dict = {'angle_min': message['msg']['angle_min'],
-                    'angle_max': message['msg']['angle_max'],
-                    'angle_increment': message['msg']['angle_increment'],
-                    'range_min': message['msg']['range_min'],
-                    'range_max': message['msg']['range_max'],
-                    'ranges': np.nan_to_num(np.array(message['msg']['ranges']).astype(np.float32))
-                    }
+        lidar_data = {'angle_min': message['msg']['angle_min'],
+                        'angle_max': message['msg']['angle_max'],
+                        'angle_increment': message['msg']['angle_increment'],
+                        'range_min': message['msg']['range_min'],
+                        'range_max': message['msg']['range_max'],
+                        'ranges': np.nan_to_num(np.array(message['msg']['ranges']).astype(np.float32))
+                        }
         
-        if msg_dict['angle_min'] <= self.ANGLE_FORWARD <= msg_dict['angle_max']:
-            index = int((self.ANGLE_FORWARD - msg_dict['angle_min']) / msg_dict['angle_increment'])
-            forward_distance = msg_dict['ranges'][index]
-        else:
-            forward_distance = 0
-        return float(forward_distance)
+        ranges = np.array(lidar_data['ranges'])
+        thetas = np.arange(lidar_data['angle_min'], lidar_data['angle_max']+lidar_data['angle_increment'], lidar_data['angle_increment'])[:len(ranges)]
+        xs = ranges * np.cos(thetas)
+        ys = ranges * np.sin(thetas)
+        pts = np.vstack((xs, ys, np.zeros(xs.shape), np.ones(xs.shape))).T
+        delta = np.deg2rad(self.CONE_ANGLE_DEG)
+        mask_min = thetas > np.pi / 2 -  delta / 2
+        mask_max = thetas < np.pi / 2 + delta / 2
+        mask = np.bitwise_and(mask_min, mask_max)
+        pts = pts[mask]
+        ranges = ranges[mask]
+        nz = np.nonzero(np.logical_or(pts[:,0] != 0., pts[:,1] != 0.))
+        pts = pts[nz]
+        ranges = ranges[nz]
+
+        return float(self.distance_to_voltage(np.mean(ranges)))
 
 
 class CameraRGBSensor(Sensor):

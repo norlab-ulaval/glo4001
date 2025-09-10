@@ -5,6 +5,7 @@ git reset --hard
 git pull
 python3 -m venv venv
 source venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 sudo wget -qO- https://docs.luxonis.com/install_dependencies.sh | bash
 

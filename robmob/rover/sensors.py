@@ -101,7 +101,8 @@ class SharpSensorVirtual(Sensor):
     MESSAGE_TYPE = 'sensor_msgs/LaserScan'
     SAMPLE_RATE = 5
     CONE_ANGLE_DEG = 10
-    SAMPLES_X = [0.00, 0.80, 1.12, 1.20, 1.28, 1.60, 3.20, 4.00, 4.80, 7.20, 10.4, 16.8]
+    #SAMPLES_X = [0.00, 0.80, 1.12, 1.20, 1.28, 1.60, 3.20, 4.00, 4.80, 7.20, 10.4, 16.8] # Full range of LiDAR
+    SAMPLES_X = [0.00, 0.10, 0.13, 0.15, 0.17, 0.20, 0.40, 0.50, 0.60, 0.90, 1.30, 16.8] # Infrared range of Sharp
     SAMPLES_Y = [0.00, 2.30, 2.70, 2.75, 2.70, 2.50, 1.50, 1.25, 1.00, 0.75, 0.50, 0.00]
 
     def __init__(self, buffer_size=500):

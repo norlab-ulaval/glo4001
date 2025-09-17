@@ -37,8 +37,6 @@ ordinateur de bord *Jetson Orin*, une paire de capteurs infra-rouge, une caméra
    ssh -L 8888:localhost:8888 norlab@192.168.0.101
    cd glo4001/scripts/
    git reset --hard
-   git pull
-   ./setup.sh
    ./ros_rover.sh
    # CTRL-A + D pour détacher le terminal
    ./jupyter.sh

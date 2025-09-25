@@ -236,13 +236,13 @@ class OakLiteCamera:
             apriltag.inputImage.setQueueSize(1)
 
 
-        self.queue_left = cam_left_output.getOutputQueue(maxSize=4, blocking=False)
+        self.queue_left = cam_left_output.createOutputQueue(maxSize=4, blocking=False)
         if use_rgb:
-            self.queue_rgb = cam_rgb_output.device.getOutputQueue(maxSize=4, blocking=False)
+            self.queue_rgb = cam_rgb_output.device.createOutputQueue(maxSize=4, blocking=False)
         if use_depth:
-            self.queue_depth = cam_stereo.depth.getOutputQueue(maxSize=4, blocking=False)
+            self.queue_depth = cam_stereo.depth.createOutputQueue(maxSize=4, blocking=False)
         if use_april:
-            self.queue_apriltag = apriltag.getOutputQueue(maxSize=8, blocking=False)
+            self.queue_apriltag = apriltag.createOutputQueue(maxSize=8, blocking=False)
 
         # Intrinsics
         #self.calibration = self.device.readCalibration()

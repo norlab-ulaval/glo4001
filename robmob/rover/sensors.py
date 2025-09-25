@@ -191,49 +191,28 @@ class OakLiteCamera:
     def __init__(self, use_rgb=False, use_depth=False, use_april=False):
         self.pipeline = dai.Pipeline()
 
+        cam_left = self.pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_B)
+        cam_left_output = cam_left.requestFullResolutionOutput(type=dai.ImgFrame.Type.BGR888p)
+
         if use_rgb:
             # RGB
-            cam_rgb = self.pipeline.create(dai.node.ColorCamera)
-            cam_rgb.setResolution(dai.ColorCameraProperties.SensorResolution.THE_720_P)
-            cam_rgb.setInterleaved(False)
-            cam_rgb.setColorOrder(dai.ColorCameraProperties.ColorOrder.BGR)
-            cam_rgb.setFps(self.FREQUENCY)
-
-            # Link
-            xout_rgb = self.pipeline.create(dai.node.XLinkOut)
-            xout_rgb.setStreamName('rgb')
-            cam_rgb.video.link(xout_rgb.input)
-
-        # Left
-        cam_left = self.pipeline.create(dai.node.MonoCamera)
-        cam_left.setCamera('left')
-        cam_left.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
-        cam_left.setFps(self.FREQUENCY)
-        xout_left = self.pipeline.create(dai.node.XLinkOut)
-        xout_left.setStreamName('left')
-        cam_left.out.link(xout_left.input)
+            cam_rgb = self.pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_A)
+            cam_rgb_output = cam_rgb.requestOutput((1920, 1080), type=dai.ImgFrame.Type.BGR888p, fps=self.FREQUENCY)
 
         if use_depth:
             # Right
-            cam_right = self.pipeline.create(dai.node.MonoCamera)
-            cam_right.setCamera('right')
-            cam_right.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
-            cam_right.setFps(self.FREQUENCY)
+            cam_right = self.pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_C)
+            cam_right_output = cam_right.requestFullResolutionOutput(type=dai.ImgFrame.Type.BGR888p)
             # Depth
             cam_stereo = self.pipeline.create(dai.node.StereoDepth)
             cam_stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
-            # cam_stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
             cam_stereo.setRectifyEdgeFillColor(0)
             cam_stereo.setLeftRightCheck(True)
             cam_stereo.setSubpixel(True)
+            cam_rgb = self.pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_A)
             cam_stereo.setDepthAlign(dai.CameraBoardSocket.RGB)
-
-            # Links
-            cam_right.out.link(cam_stereo.right)
-            cam_left.out.link(cam_stereo.left)
-            xout_depth = self.pipeline.create(dai.node.XLinkOut)
-            xout_depth.setStreamName('depth')
-            cam_stereo.depth.link(xout_depth.input)
+            cam_left_output.link(cam_stereo.left)
+            cam_right_output.link(cam_stereo.right)
 
         if use_april:
             apriltag = self.pipeline.create(dai.node.AprilTag)
@@ -252,27 +231,23 @@ class OakLiteCamera:
             april_config.quadThresholds.minWhiteBlackDiff = 5
             april_config.quadThresholds.deglitch = False
 
-            xout_apriltag = self.pipeline.create(dai.node.XLinkOut)
-            apriltag.passthroughInputImage.link(xout_left.input)
             cam_left.out.link(apriltag.inputImage)
-            apriltag.out.link(xout_apriltag.input)
             apriltag.inputImage.setBlocking(False)
             apriltag.inputImage.setQueueSize(1)
 
-            xout_apriltag.setStreamName('apriltagdata')
 
-
-        self.device = dai.Device(self.pipeline)
-        self.queue_left = self.device.getOutputQueue(name='left', maxSize=4, blocking=False)
+        self.queue_left = cam_left_output.getOutputQueue(maxSize=4, blocking=False)
         if use_rgb:
-            self.queue_rgb = self.device.getOutputQueue(name='rgb', maxSize=4, blocking=False)
+            self.queue_rgb = cam_rgb_output.device.getOutputQueue(maxSize=4, blocking=False)
         if use_depth:
-            self.queue_depth = self.device.getOutputQueue(name='depth', maxSize=4, blocking=False)
+            self.queue_depth = cam_stereo.depth.getOutputQueue(maxSize=4, blocking=False)
         if use_april:
-            self.queue_apriltag = self.device.getOutputQueue(name='apriltagdata', maxSize=8, blocking=False)
+            self.queue_apriltag = apriltag.getOutputQueue(maxSize=8, blocking=False)
 
         # Intrinsics
-        self.calibration = self.device.readCalibration()
+        #self.calibration = self.device.readCalibration()
+
+        self.pipeline.start()
 
     def __del__(self):
         self.device.close()

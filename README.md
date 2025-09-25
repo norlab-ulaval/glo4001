@@ -4,8 +4,7 @@ Les laboratoires doivent être réalisés en équipe de quatre ou plus.
 
 Matériel requis: un ordinateur portable par équipe (pour la connexion wifi), une plate-forme robotique par équipe.
 
-Les responsables des laboratoires sont William Guimont-Martin (william.guimont-martin@norlab.ulaval.ca) et William
-Larrivée-Hardy (william.larrivee-hardy@norlab.ulaval.ca).
+Les responsables des laboratoires William Larrivée-Hardy (william.larrivee-hardy@norlab.ulaval.ca) et Nicolas Lauzon (nicolas.lauzon@norlab.ulaval.ca).
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
@@ -37,8 +36,6 @@ ordinateur de bord *Jetson Orin*, une paire de capteurs infra-rouge, une caméra
    ssh -L 8888:localhost:8888 norlab@192.168.0.101
    cd glo4001/scripts/
    git reset --hard
-   git pull
-   ./setup.sh
    ./ros_rover.sh
    # CTRL-A + D pour détacher le terminal
    ./jupyter.sh

@@ -238,7 +238,7 @@ class OakLiteCamera:
 
         self.queue_left = cam_left_output.createOutputQueue(maxSize=4, blocking=False)
         if use_rgb:
-            self.queue_rgb = cam_rgb_output.device.createOutputQueue(maxSize=4, blocking=False)
+            self.queue_rgb = cam_rgb_output.createOutputQueue(maxSize=4, blocking=False)
         if use_depth:
             self.queue_depth = cam_stereo.depth.createOutputQueue(maxSize=4, blocking=False)
         if use_april:

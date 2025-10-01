@@ -189,30 +189,31 @@ class OakLiteCamera:
     FREQUENCY = 10
 
     def __init__(self, use_rgb=False, use_depth=False, use_april=False):
+        # Intrinsics
+        self.calibration = dai.Device().readCalibration()
         self.pipeline = dai.Pipeline()
 
         cam_left = self.pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_B)
-        cam_left_output = cam_left.requestFullResolutionOutput(type=dai.ImgFrame.Type.BGR888p)
+        cam_left_output = cam_left.requestFullResolutionOutput(type=dai.ImgFrame.Type.NV12, fps=self.FREQUENCY)
 
         if use_rgb:
             # RGB
             cam_rgb = self.pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_A)
-            cam_rgb_output = cam_rgb.requestOutput((1920, 1080), type=dai.ImgFrame.Type.BGR888p, fps=self.FREQUENCY)
+            cam_rgb_output = cam_rgb.requestOutput((1920, 1080), type=dai.ImgFrame.Type.NV12, fps=self.FREQUENCY)
 
         if use_depth:
             # Right
             cam_right = self.pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_C)
-            cam_right_output = cam_right.requestFullResolutionOutput(type=dai.ImgFrame.Type.BGR888p)
+            cam_right_output = cam_right.requestFullResolutionOutput(type=dai.ImgFrame.Type.NV12, fps=self.FREQUENCY)
             # Depth
-            cam_stereo = self.pipeline.create(dai.node.StereoDepth)
-            cam_stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
+            cam_stereo = self.pipeline.create(dai.node.StereoDepth).build(
+                left=cam_left_output, right=cam_right_output, 
+                presetMode=dai.node.StereoDepth.PresetMode.FACE)
+            cam_stereo.setDepthAlign(dai.CameraBoardSocket.RGB)
+            cam_stereo.setOutputSize(1920, 1080)
             cam_stereo.setRectifyEdgeFillColor(0)
             cam_stereo.setLeftRightCheck(True)
             cam_stereo.setSubpixel(True)
-            cam_rgb = self.pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_A)
-            cam_stereo.setDepthAlign(dai.CameraBoardSocket.RGB)
-            cam_left_output.link(cam_stereo.left)
-            cam_right_output.link(cam_stereo.right)
 
         if use_april:
             apriltag = self.pipeline.create(dai.node.AprilTag)
@@ -236,16 +237,14 @@ class OakLiteCamera:
             apriltag.inputImage.setQueueSize(1)
 
 
-        self.queue_left = cam_left_output.createOutputQueue(maxSize=4, blocking=False)
         if use_rgb:
-            self.queue_rgb = cam_rgb_output.device.createOutputQueue(maxSize=4, blocking=False)
+            self.queue_rgb = cam_rgb_output.createOutputQueue(maxSize=4, blocking=False)
         if use_depth:
             self.queue_depth = cam_stereo.depth.createOutputQueue(maxSize=4, blocking=False)
+        else:
+            self.queue_left = cam_left_output.createOutputQueue(maxSize=4, blocking=False)
         if use_april:
             self.queue_apriltag = apriltag.createOutputQueue(maxSize=8, blocking=False)
-
-        # Intrinsics
-        #self.calibration = self.device.readCalibration()
 
         self.pipeline.start()
 
@@ -269,8 +268,7 @@ class OakLiteCamera:
         return in_depth.getFrame()
 
     def get_focal_length(self):
-        calibration = self.device.readCalibration()
-        intrinsics = calibration.getCameraIntrinsics(dai.CameraBoardSocket.RGB)
+        intrinsics = self.calibration.getCameraIntrinsics(dai.CameraBoardSocket.RGB)
         return intrinsics[0][0]
 
 

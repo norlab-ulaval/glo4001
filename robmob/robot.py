@@ -11,10 +11,10 @@ from robmob.rover.commands import ResetCommand, MovementFloatCommand
 
 
 class Robot:
-    DISTANCE_CENTER_TO_WHEEL = 17.5 / 200
+    DISTANCE_CENTER_TO_WHEEL = 12.5 / 200
     BASELINE = 2 * DISTANCE_CENTER_TO_WHEEL
     ALPHA = 1.25
-    WHEEL_DIAMETER = 80 / 1000
+    WHEEL_DIAMETER = 50 / 1000
     WHEEL_RADIUS = WHEEL_DIAMETER / 2
 
     def __init__(self, robot_ip, port=9090):
